@@ -95,7 +95,7 @@ public class LeaveManagementSystem {
         String id = sc.nextLine();
         Employee e = empService.getEmployee(id);
         if(e==null){
-            throw new EmployeeNotFound("No Employee present with this ID")
+            throw new EmployeeNotFound("No Employee present with this ID");
         }
         System.out.println("Welcome " + e.getName());
         empMenu(id);

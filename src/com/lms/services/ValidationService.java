@@ -1,6 +1,7 @@
 
 package com.lms.services;
 
+import com.lms.exceptions.InvalidDateRange;
 import com.lms.exceptions.InvalidLeaveRequest;
 import com.lms.models.Employee;
 import com.lms.models.enums.LeaveType;
@@ -28,12 +29,22 @@ public class ValidationService {
     }
 
     public boolean validateLeaveRequest(Employee employee, LeaveType leaveType,
-                                        LocalDate startDate, LocalDate endDate) throws InvalidLeaveRequest {
+                                        LocalDate startDate, LocalDate endDate) throws InvalidLeaveRequest, InvalidDateRange {
 
 
         int leavedDays = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
         int balance = employee.getLeaveBalance().getOrDefault(leaveType, 0);
 
+        if(startDate==null || endDate==null){
+            throw new InvalidDateRange("Start Date and End Date cannot be null");
+        }
+
+        if(startDate.isAfter(endDate)){
+            throw new InvalidDateRange(startDate, endDate);
+        }
+        if(startDate.isBefore(LocalDate.now())){
+            throw new InvalidDateRange("You are making request for past dates.");
+        }
         if (leaveType == LeaveType.CASUAL_LEAVE) {
             if (leavedDays > 2) {
                 throw new InvalidLeaveRequest("Cannot take more than 2 casual leaves at a time!");
