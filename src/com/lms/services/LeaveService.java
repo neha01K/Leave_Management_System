@@ -1,5 +1,6 @@
 package com.lms.services;
 
+import com.lms.exceptions.EmployeeNotFound;
 import com.lms.models.Employee;
 import com.lms.models.LeaveRequest;
 import com.lms.models.enums.EmployeeType;
@@ -22,7 +23,7 @@ public class LeaveService {
         leaveReqs.put(r.getRequestId(), r);
     }
 
-    public List<LeaveRequest> getPendingRequestsForApprover(String apprId) {
+    public List<LeaveRequest> getPendingRequestsForApprover(String apprId) throws EmployeeNotFound {
         Employee appr = empService.getEmployee(apprId);
         List<LeaveRequest> pendingRequests = new ArrayList<>();
         for (LeaveRequest request : leaveReqs.values()) {
@@ -43,7 +44,7 @@ public class LeaveService {
         return pendingRequests;
     }
 
-    public void approveLeave(LeaveRequest r, String apprId) {
+    public void approveLeave(LeaveRequest r, String apprId) throws EmployeeNotFound{
         Employee e = empService.getEmployee(r.getEmployeeId());
         e.updateLeaveBalance(r.getLeaveType(), -r.getNumberOfDays());
         e.updateUsedLeaves(r.getLeaveType(), r.getNumberOfDays());

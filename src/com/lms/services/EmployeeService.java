@@ -1,5 +1,6 @@
 package com.lms.services;
 
+import com.lms.exceptions.EmployeeNotFound;
 import com.lms.models.Employee;
 import com.lms.models.enums.EmployeeType;
 
@@ -34,7 +35,15 @@ public class EmployeeService {
         return newEmployee;
     }
 
-    public Employee getEmployee(String employeeId) {
+    public Employee getEmployee(String employeeId) throws EmployeeNotFound{
+        if(employeeId==null || employeeId.trim().isEmpty()){
+            throw new EmployeeNotFound("Employee ID cannot be null or empty");
+        }
+
+        Employee employee = employees.get(employeeId);
+        if(employee == null){
+            throw new EmployeeNotFound(employeeId);
+        }
         return employees.get(employeeId);
     }
 

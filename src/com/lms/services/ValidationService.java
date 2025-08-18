@@ -1,6 +1,7 @@
 
 package com.lms.services;
 
+import com.lms.exceptions.InvalidLeaveRequest;
 import com.lms.models.Employee;
 import com.lms.models.enums.LeaveType;
 import java.time.LocalDate;
@@ -27,36 +28,32 @@ public class ValidationService {
     }
 
     public boolean validateLeaveRequest(Employee employee, LeaveType leaveType,
-                                        LocalDate startDate, LocalDate endDate) {
-        int days = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
+                                        LocalDate startDate, LocalDate endDate) throws InvalidLeaveRequest {
+
+
+        int leavedDays = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
         int balance = employee.getLeaveBalance().getOrDefault(leaveType, 0);
 
         if (leaveType == LeaveType.CASUAL_LEAVE) {
-            if (days > 2) {
-                System.out.println("Cannot take more than 2 casual leaves at a time!");
-                return false;
+            if (leavedDays > 2) {
+                throw new InvalidLeaveRequest("Cannot take more than 2 casual leaves at a time!");
             }
-            if (days > balance) {
-                System.out.println("Insufficient casual leave balance!");
-                return false;
+            if (leavedDays > balance){
+               throw new InvalidLeaveRequest("Insufficient casual leave balance!");
             }
         }
 
-        if (leaveType == LeaveType.EARNED_LEAVE && (balance - days) < -15) {
-            System.out.println("Cannot exceed negative balance limit of 15 days for Earned Leave!");
-            return false;
+        if (leaveType == LeaveType.EARNED_LEAVE && (balance - leavedDays) < -15) {
+            throw new InvalidLeaveRequest("Cannot exceed negative balance limit of 15 days for Earned Leave!");
         }
 
-        if (leaveType == LeaveType.SICK_LEAVE && (balance - days) < -12) {
-            System.out.println("Cannot exceed negative balance limit of 12 days for Sick Leave!");
-            return false;
+        if (leaveType == LeaveType.SICK_LEAVE && (balance - leavedDays) < -12) {
+            throw new InvalidLeaveRequest("Cannot exceed negative balance limit of 12 days for Sick Leave!");
         }
 
-        if (leaveType == LeaveType.LEAVE_WITHOUT_PAY && days > 180) {
-            System.out.println("Cannot take more than 180 days of Leave Without Pay!");
-            return false;
+        if (leaveType == LeaveType.LEAVE_WITHOUT_PAY && leavedDays > 180) {
+            throw new InvalidLeaveRequest("Cannot take more than 180 days of Leave Without Pay!");
         }
-
         return true;
     }
 }

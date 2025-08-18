@@ -1,5 +1,7 @@
 package com.lms;
 
+import com.lms.exceptions.EmployeeNotFound;
+import com.lms.exceptions.InvalidLeaveRequest;
 import com.lms.models.Employee;
 import com.lms.models.LeaveRequest;
 import com.lms.models.enums.EmployeeType;
@@ -27,7 +29,7 @@ public class LeaveManagementSystem {
         vService = new ValidationService();
     }
 
-    public void showMainMenu(){
+    public void showMainMenu() throws EmployeeNotFound, InvalidLeaveRequest{
         while(true){
             System.out.println("------Leave Management System------");
             System.out.println("1. Register Employee");
@@ -87,7 +89,7 @@ public class LeaveManagementSystem {
         System.out.println("Registered! ID: " + emp.getEmployeeId());
     }
 
-    void employeeLogin(){
+    void employeeLogin() throws EmployeeNotFound, InvalidLeaveRequest{
         System.out.print("Enter emp id: ");
         String id = sc.nextLine();
         Employee e = empService.getEmployee(id);
@@ -99,7 +101,7 @@ public class LeaveManagementSystem {
         empMenu(id);
     }
 
-    void empMenu(String id){
+    void empMenu(String id) throws EmployeeNotFound, InvalidLeaveRequest {
         Employee e = empService.getEmployee(id);
         while(true){
             System.out.println("=== Employee Menu ===");
@@ -149,7 +151,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    void askLeave(String id){
+    void askLeave(String id) throws EmployeeNotFound, InvalidLeaveRequest {
         Employee e = empService.getEmployee(id);
         if(e==null){
             System.out.println("Not found");
@@ -192,7 +194,7 @@ public class LeaveManagementSystem {
         System.out.println("Submitted. Req ID: "+req.getRequestId());
     }
 
-    void processLeaves(String approverId){
+    void processLeaves(String approverId) throws EmployeeNotFound{
         List<LeaveRequest> pend = lService.getPendingRequestsForApprover(approverId);
         if(pend.isEmpty()){
             System.out.println("None");
@@ -226,7 +228,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    void leaveBal(String empId){
+    void leaveBal(String empId) throws EmployeeNotFound{
         Employee e = empService.getEmployee(empId);
         if(e==null){
             System.out.println("Not found");
@@ -237,7 +239,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    void leaveHist(String empId){
+    void leaveHist(String empId) throws EmployeeNotFound{
         Employee e = empService.getEmployee(empId);
         if(e==null){
             System.out.println("Not found");
@@ -259,7 +261,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws EmployeeNotFound, InvalidLeaveRequest{
         LeaveManagementSystem obj = new LeaveManagementSystem();
         obj.showMainMenu();
     }
