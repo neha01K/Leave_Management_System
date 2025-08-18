@@ -24,8 +24,10 @@ public class LeaveService {
     }
 
     public List<LeaveRequest> getPendingRequestsForApprover(String apprId) throws EmployeeNotFound {
+
         Employee appr = empService.getEmployee(apprId);
         List<LeaveRequest> pendingRequests = new ArrayList<>();
+
         for (LeaveRequest request : leaveReqs.values()) {
             if (request.getStatus() == LeaveStatus.PENDING) {
                 Employee emp = empService.getEmployee(request.getEmployeeId());

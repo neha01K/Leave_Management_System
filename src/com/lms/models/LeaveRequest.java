@@ -1,5 +1,6 @@
 package com.lms.models;
 
+import com.lms.exceptions.InvalidDateRange;
 import com.lms.models.enums.LeaveType;
 import com.lms.models.enums.LeaveStatus;
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class LeaveRequest {
     private String parenthoodCertificate;
 
     public LeaveRequest(String employeeId, LeaveType leaveType, LocalDate startDate,
-                        LocalDate endDate, String reason) {
+                        LocalDate endDate, String reason) throws InvalidDateRange {
         this.requestId = generateRequestId();
         this.employeeId = employeeId;
         this.leaveType = leaveType;
@@ -37,22 +38,54 @@ public class LeaveRequest {
     }
 
     // Getters and Setters
-    public String getRequestId() { return requestId; }
-    public String getEmployeeId() { return employeeId; }
-    public LeaveType getLeaveType() { return leaveType; }
-    public LocalDate getStartDate() { return startDate; }
-    public LocalDate getEndDate() { return endDate; }
-    public int getNumberOfDays() { return numberOfDays; }
-    public String getReason() { return reason; }
-    public LeaveStatus getStatus() { return status; }
-    public void setStatus(LeaveStatus status) { this.status = status; }
-    public String getApprovedBy() { return approvedBy; }
-    public void setApprovedBy(String approvedBy) { this.approvedBy = approvedBy; }
-    public LocalDate getRequestDate() { return requestDate; }
-    public String getMedicalCertificate() { return medicalCertificate; }
-    public void setMedicalCertificate(String cert) { this.medicalCertificate = cert; }
-    public String getParenthoodCertificate() { return parenthoodCertificate; }
-    public void setParenthoodCertificate(String cert) { this.parenthoodCertificate = cert; }
+    public String getRequestId() {
+        return requestId;
+    }
+    public String getEmployeeId() {
+        return employeeId;
+    }
+    public LeaveType getLeaveType() {
+        return leaveType;
+    }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+    public int getNumberOfDays() {
+        return numberOfDays;
+    }
+    public String getReason() {
+        return reason;
+    }
+    public LeaveStatus getStatus() {
+        return status;
+    }
+    public void setStatus(LeaveStatus status) {
+        this.status = status;
+    }
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
+    }
+    public LocalDate getRequestDate() {
+        return requestDate;
+    }
+    public String getMedicalCertificate() {
+        return medicalCertificate;
+    }
+    public void setMedicalCertificate(String cert) {
+        this.medicalCertificate = cert;
+    }
+    public String getParenthoodCertificate() {
+        return parenthoodCertificate;
+    }
+    public void setParenthoodCertificate(String cert) {
+        this.parenthoodCertificate = cert;
+    }
 
     @Override
     public String toString() {

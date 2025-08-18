@@ -1,6 +1,7 @@
 package com.lms;
 
 import com.lms.exceptions.EmployeeNotFound;
+import com.lms.exceptions.InvalidDateRange;
 import com.lms.exceptions.InvalidLeaveRequest;
 import com.lms.models.Employee;
 import com.lms.models.LeaveRequest;
@@ -29,7 +30,7 @@ public class LeaveManagementSystem {
         vService = new ValidationService();
     }
 
-    public void showMainMenu() throws EmployeeNotFound, InvalidLeaveRequest{
+    public void showMainMenu() throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange{
         while(true){
             System.out.println("------Leave Management System------");
             System.out.println("1. Register Employee");
@@ -89,19 +90,18 @@ public class LeaveManagementSystem {
         System.out.println("Registered! ID: " + emp.getEmployeeId());
     }
 
-    void employeeLogin() throws EmployeeNotFound, InvalidLeaveRequest{
+    void employeeLogin() throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange{
         System.out.print("Enter emp id: ");
         String id = sc.nextLine();
         Employee e = empService.getEmployee(id);
         if(e==null){
-            System.out.println("Not found");
-            return;
+            throw new EmployeeNotFound("No Employee present with this ID")
         }
         System.out.println("Welcome " + e.getName());
         empMenu(id);
     }
 
-    void empMenu(String id) throws EmployeeNotFound, InvalidLeaveRequest {
+    void empMenu(String id) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
         Employee e = empService.getEmployee(id);
         while(true){
             System.out.println("=== Employee Menu ===");
@@ -151,7 +151,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    void askLeave(String id) throws EmployeeNotFound, InvalidLeaveRequest {
+    void askLeave(String id) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
         Employee e = empService.getEmployee(id);
         if(e==null){
             System.out.println("Not found");
@@ -261,7 +261,7 @@ public class LeaveManagementSystem {
         }
     }
 
-    public static void main(String[] args) throws EmployeeNotFound, InvalidLeaveRequest{
+    public static void main(String[] args) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange{
         LeaveManagementSystem obj = new LeaveManagementSystem();
         obj.showMainMenu();
     }
