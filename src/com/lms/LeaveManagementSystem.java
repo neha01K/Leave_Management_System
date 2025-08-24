@@ -18,16 +18,16 @@ import java.util.Scanner;
 
 public class LeaveManagementSystem {
 
-    Scanner sc;
-    EmployeeService empService;
-    LeaveService lService;
-    ValidationService vService;
+    Scanner scanner;
+    EmployeeService employeeService;
+    LeaveService leaveService;
+    ValidationService validateService;
 
     public LeaveManagementSystem(){
-        sc = new Scanner(System.in);
-        empService = new EmployeeService();
-        lService = new LeaveService(empService);
-        vService = new ValidationService();
+        scanner = new Scanner(System.in);
+        employeeService = new EmployeeService();
+        leaveService = new LeaveService(employeeService);
+        validateService = new ValidationService();
     }
 
     public void showMainMenu() throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange{
@@ -38,10 +38,10 @@ public class LeaveManagementSystem {
             System.out.println("3. Show Employees");
             System.out.println("4. Exit");
             System.out.print("Enter option: ");
-            int ch = sc.nextInt();
-            sc.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-            switch(ch){
+            switch(choice){
                 case 1:
                     registerEmployee();
                     break;
@@ -62,81 +62,81 @@ public class LeaveManagementSystem {
 
     void registerEmployee(){
         System.out.print("Name: ");
-        String name = sc.nextLine();
+        String name = scanner.nextLine();
         System.out.print("Email: ");
-        String email = sc.nextLine();
+        String email = scanner.nextLine();
         System.out.println("Type: 1.Executive 2.Lead 3.Manager");
-        int t = sc.nextInt();
-        sc.nextLine();
-        EmployeeType et;
-        switch(t){
+        int type = scanner.nextInt();
+        scanner.nextLine();
+        EmployeeType employeeType;
+        switch(type){
             case 1:
-                et = EmployeeType.EXECUTIVE;
+                employeeType = EmployeeType.EXECUTIVE;
                 break;
             case 2:
-                et = EmployeeType.LEAD;
+                employeeType = EmployeeType.LEAD;
                 break;
             case 3:
-                et = EmployeeType.MANAGER;
+                employeeType = EmployeeType.MANAGER;
                 break;
             default:
-                et = EmployeeType.EXECUTIVE;
+                employeeType = EmployeeType.EXECUTIVE;
                 System.out.println("Invalid choice so default Executive");
         }
         System.out.print("Joining date (YYYY-MM-DD): ");
-        LocalDate jd = LocalDate.parse(sc.nextLine());
+        LocalDate joiningDate = LocalDate.parse(scanner.nextLine());
 
-        Employee emp = empService.createEmployee(name,email,et,jd);
-        System.out.println("Registered! ID: " + emp.getEmployeeId());
+        Employee employee = employeeService.createEmployee(name,email,employeeType,joiningDate);
+        System.out.println("Registered! ID: " + employee.getEmployeeId());
     }
 
     void employeeLogin() throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange{
-        System.out.print("Enter emp id: ");
-        String id = sc.nextLine();
-        Employee e = empService.getEmployee(id);
-        if(e==null){
+        System.out.print("Enter Employee id: ");
+        String id = scanner.nextLine();
+        Employee employee = employeeService.getEmployee(id);
+        if(employee==null){
             throw new EmployeeNotFound("No Employee present with this ID");
         }
-        System.out.println("Welcome " + e.getName());
-        empMenu(id);
+        System.out.println("Welcome! " + employee.getName());
+        employeeMenu(id);
     }
 
-    void empMenu(String id) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
-        Employee e = empService.getEmployee(id);
+    void employeeMenu(String id) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
+        Employee employee = employeeService.getEmployee(id);
         while(true){
-            System.out.println("=== Employee Menu ===");
+            System.out.println("-----Employee Menu-----");
             System.out.println("1. Request Leave");
             System.out.println("2. Leave Balance");
             System.out.println("3. Leave History");
-            if(e.getType()==EmployeeType.LEAD || e.getType()==EmployeeType.MANAGER){
+            if(employee.getType()==EmployeeType.LEAD || employee.getType()==EmployeeType.MANAGER){
                 System.out.println("4. Process Leaves");
             }
-            if(e.getType()==EmployeeType.MANAGER){
+            if(employee.getType()==EmployeeType.MANAGER){
                 System.out.println("5. Show Employees");
             }
             System.out.println("0. Logout");
-            int ch = sc.nextInt();
-            sc.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-            switch(ch){
+            switch(choice){
                 case 1:
                     askLeave(id);
                     break;
                 case 2:
-                    leaveBal(id);
+                    leaveBalance(id);
                     break;
                 case 3:
-                    leaveHist(id);
+                    leaveHistory(id);
                     break;
                 case 4:
-                    if(e.getType()==EmployeeType.LEAD || e.getType()==EmployeeType.MANAGER){
+                    if(employee.getType()==EmployeeType.LEAD || employee.getType()==EmployeeType.MANAGER){
                         processLeaves(id);
                     } else {
                         System.out.println("Invalid");
                     }
                     break;
                 case 5:
-                    if(e.getType()==EmployeeType.MANAGER){
+                    if(employee.getType()==EmployeeType.MANAGER){
                         showEmployees();
                     } else {
                         System.out.println("Invalid");
@@ -152,75 +152,78 @@ public class LeaveManagementSystem {
     }
 
     void askLeave(String id) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
-        Employee e = empService.getEmployee(id);
-        if(e==null){
-            System.out.println("Not found");
+        Employee employee = employeeService.getEmployee(id);
+        if(employee==null){
+            System.out.println("Not Found!!");
             return;
         }
-        System.out.println("Leave types:");
+        System.out.println("Leave Types:");
         LeaveType[] arr = LeaveType.values();
         for(int i=0;i<arr.length;i++){
             System.out.println((i+1)+". "+arr[i]);
         }
-        int ch = sc.nextInt();
-        sc.nextLine();
-        if(ch<1 || ch>arr.length){
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        if(choice<1 || choice>arr.length){
             System.out.println("Invalid");
             return;
         }
-        LeaveType lt = arr[ch-1];
-        if(!vService.validateLeaveTypeForEmployee(e, lt)){
+        LeaveType leaveType = arr[choice-1];
+        if(!validateService.validateLeaveTypeForEmployee(employee, leaveType)){
             return;
         }
-        System.out.print("Start date: ");
-        LocalDate s = LocalDate.parse(sc.nextLine());
-        System.out.print("End date: ");
-        LocalDate ed = LocalDate.parse(sc.nextLine());
+        System.out.print("Start Date: ");
+        LocalDate startDate = LocalDate.parse(scanner.nextLine());
+
+        System.out.print("End Date: ");
+        LocalDate endDate = LocalDate.parse(scanner.nextLine());
+
         System.out.print("Reason: ");
-        String rsn = sc.nextLine();
-        if(!vService.validateLeaveRequest(e,lt,s,ed)){
+        String reason = scanner.nextLine();
+
+        if(!validateService.validateLeaveRequest(employee,leaveType,startDate,endDate)){
             return;
         }
-        LeaveRequest req = new LeaveRequest(id, lt, s, ed, rsn);
-        if(lt==LeaveType.SICK_LEAVE || lt==LeaveType.MATERNITY_LEAVE){
-            System.out.print("Medical cert: ");
-            req.setMedicalCertificate(sc.nextLine());
+        LeaveRequest request = new LeaveRequest(id, leaveType, startDate, endDate, reason);
+        if(leaveType==LeaveType.SICK_LEAVE || leaveType==LeaveType.MATERNITY_LEAVE){
+            System.out.print("Medical Certificate: ");
+            request.setMedicalCertificate(scanner.nextLine());
         }
-        if(lt==LeaveType.PARENTAL_LEAVE){
-            System.out.print("Parent cert: ");
-            req.setParenthoodCertificate(sc.nextLine());
+        if(leaveType==LeaveType.PARENTAL_LEAVE){
+            System.out.print("Parent Certificate: ");
+            request.setParenthoodCertificate(scanner.nextLine());
         }
-        lService.submitLeaveRequest(req);
-        System.out.println("Submitted. Req ID: "+req.getRequestId());
+        leaveService.submitLeaveRequest(request);
+        System.out.println("Submitted Request ID: "+request.getRequestId());
     }
 
     void processLeaves(String approverId) throws EmployeeNotFound{
-        List<LeaveRequest> pend = lService.getPendingRequestsForApprover(approverId);
-        if(pend.isEmpty()){
+        List<LeaveRequest> pendingRequestsForApprover = leaveService.getPendingRequestsForApprover(approverId);
+        if(pendingRequestsForApprover.isEmpty()){
             System.out.println("None");
             return;
         }
-        for(int i=0;i<pend.size();i++){
-            System.out.println((i+1)+". "+pend.get(i));
+        for(int i=0;i<pendingRequestsForApprover.size();i++){
+            System.out.println((i+1)+". "+pendingRequestsForApprover.get(i));
         }
         System.out.print("Pick no: ");
-        int ch = sc.nextInt();
-        sc.nextLine();
-        if(ch<1 || ch>pend.size()){
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        if(choice<1 || choice>pendingRequestsForApprover.size()){
             System.out.println("Invalid");
             return;
         }
-        LeaveRequest req = pend.get(ch-1);
+        LeaveRequest request = pendingRequestsForApprover.get(choice-1);
         System.out.println("1. Approve 2. Reject");
-        int act = sc.nextInt();
-        sc.nextLine();
-        switch(act){
+        int action = scanner.nextInt();
+        scanner.nextLine();
+        switch(action){
             case 1:
-                lService.approveLeave(req, approverId);
+                leaveService.approveLeave(request, approverId);
                 System.out.println("Approved");
                 break;
             case 2:
-                lService.rejectLeave(req, approverId);
+                leaveService.rejectLeave(request, approverId);
                 System.out.println("Rejected");
                 break;
             default:
@@ -228,36 +231,36 @@ public class LeaveManagementSystem {
         }
     }
 
-    void leaveBal(String empId) throws EmployeeNotFound{
-        Employee e = empService.getEmployee(empId);
-        if(e==null){
-            System.out.println("Not found");
+    void leaveBalance(String empId) throws EmployeeNotFound{
+        Employee employee = employeeService.getEmployee(empId);
+        if(employee==null){
+            System.out.println("Not found!");
             return;
         }
-        for(Map.Entry<LeaveType,Integer> en : e.getLeaveBalance().entrySet()){
+        for(Map.Entry<LeaveType,Integer> en : employee.getLeaveBalance().entrySet()){
             System.out.println(en.getKey()+" = "+en.getValue());
         }
     }
 
-    void leaveHist(String empId) throws EmployeeNotFound{
-        Employee e = empService.getEmployee(empId);
-        if(e==null){
-            System.out.println("Not found");
+    void leaveHistory(String employeeId) throws EmployeeNotFound{
+        Employee employee = employeeService.getEmployee(employeeId);
+        if(employee==null){
+            System.out.println("Not found!");
             return;
         }
-        List<LeaveRequest> h = lService.getLeaveHistoryForEmployee(empId);
-        if(h.isEmpty()){
-            System.out.println("No history");
+        List<LeaveRequest> history = leaveService.getLeaveHistoryForEmployee(employeeId);
+        if(history.isEmpty()){
+            System.out.println("No history!");
         } else {
-            for(LeaveRequest lr : h){
-                System.out.println(lr);
+            for(LeaveRequest leaveRequest : history){
+                System.out.println(leaveRequest);
             }
         }
     }
 
     void showEmployees(){
-        for(Employee emp : empService.getAllEmployees().values()){
-            System.out.println(emp);
+        for(Employee employee : employeeService.getAllEmployees().values()){
+            System.out.println(employee);
         }
     }
 
