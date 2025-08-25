@@ -25,16 +25,20 @@ public class LeaveService {
 
     public List<LeaveRequest> getPendingRequestsForApprover(String apprId) throws EmployeeNotFound {
 
-        Employee appr = empService.getEmployee(apprId);
+        Employee approver = empService.getEmployee(apprId);
         List<LeaveRequest> pendingRequests = new ArrayList<>();
 
         for (LeaveRequest request : leaveReqs.values()) {
+
             if (request.getStatus() == LeaveStatus.PENDING) {
                 Employee emp = empService.getEmployee(request.getEmployeeId());
+
                 if (emp != null) {
-                    if (appr.getType() == EmployeeType.MANAGER) {
+
+                    if (approver.getType() == EmployeeType.MANAGER) {
                         pendingRequests.add(request);
-                    } else if (appr.getType() == EmployeeType.LEAD) {
+                    }
+                    else if (approver.getType() == EmployeeType.LEAD) {
                         if (emp.getType() == EmployeeType.EXECUTIVE &&
                                 apprId.equals(emp.getManagerId())) {
                             pendingRequests.add(request);
@@ -46,18 +50,19 @@ public class LeaveService {
         return pendingRequests;
     }
 
-    public void approveLeave(LeaveRequest r, String apprId) throws EmployeeNotFound{
-        Employee e = empService.getEmployee(r.getEmployeeId());
-        e.updateLeaveBalance(r.getLeaveType(), -r.getNumberOfDays());
-        e.updateUsedLeaves(r.getLeaveType(), r.getNumberOfDays());
-        if (r.getLeaveType() == LeaveType.MATERNITY_LEAVE) {
+    public void approveLeave(LeaveRequest request, String approverId) throws EmployeeNotFound{
+        Employee e = empService.getEmployee(request.getEmployeeId());
+
+        e.updateLeaveBalance(request.getLeaveType(), -request.getNumberOfDays());
+        e.updateUsedLeaves(request.getLeaveType(), request.getNumberOfDays());
+        if (request.getLeaveType() == LeaveType.MATERNITY_LEAVE) {
             e.incrementMaternityLeaves();
         }
-        if (r.getLeaveType() == LeaveType.PARENTAL_LEAVE) {
+        if (request.getLeaveType() == LeaveType.PARENTAL_LEAVE) {
             e.incrementParentalLeaves();
         }
-        r.setStatus(LeaveStatus.APPROVED);
-        r.setApprovedBy(apprId);
+        request.setStatus(LeaveStatus.APPROVED);
+        request.setApprovedBy(approverId);
     }
 
     public void rejectLeave(LeaveRequest r, String apprId) {

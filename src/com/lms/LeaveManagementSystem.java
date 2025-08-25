@@ -237,8 +237,8 @@ public class LeaveManagementSystem {
             System.out.println("Not found!");
             return;
         }
-        for(Map.Entry<LeaveType,Integer> en : employee.getLeaveBalance().entrySet()){
-            System.out.println(en.getKey()+" = "+en.getValue());
+        for(Map.Entry<LeaveType,Integer> employeeLeaveBalance : employee.getLeaveBalance().entrySet()){
+            System.out.println(employeeLeaveBalance.getKey()+" = "+employeeLeaveBalance.getValue());
         }
     }
 
