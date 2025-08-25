@@ -19,8 +19,8 @@ public class LeaveService {
         this.empService = empService;
     }
 
-    public void submitLeaveRequest(LeaveRequest r) {
-        leaveReqs.put(r.getRequestId(), r);
+    public void submitLeaveRequest(LeaveRequest request) {
+        leaveReqs.put(request.getRequestId(), request);
     }
 
     public List<LeaveRequest> getPendingRequestsForApprover(String apprId) throws EmployeeNotFound {
@@ -31,16 +31,16 @@ public class LeaveService {
         for (LeaveRequest request : leaveReqs.values()) {
 
             if (request.getStatus() == LeaveStatus.PENDING) {
-                Employee emp = empService.getEmployee(request.getEmployeeId());
+                Employee employee = empService.getEmployee(request.getEmployeeId());
 
-                if (emp != null) {
+                if (employee != null) {
 
                     if (approver.getType() == EmployeeType.MANAGER) {
                         pendingRequests.add(request);
                     }
                     else if (approver.getType() == EmployeeType.LEAD) {
-                        if (emp.getType() == EmployeeType.EXECUTIVE &&
-                                apprId.equals(emp.getManagerId())) {
+                        if (employee.getType() == EmployeeType.EXECUTIVE &&
+                                apprId.equals(employee.getManagerId())) {
                             pendingRequests.add(request);
                         }
                     }
@@ -51,16 +51,21 @@ public class LeaveService {
     }
 
     public void approveLeave(LeaveRequest request, String approverId) throws EmployeeNotFound{
-        Employee e = empService.getEmployee(request.getEmployeeId());
+        Employee employee = empService.getEmployee(request.getEmployeeId());
 
-        e.updateLeaveBalance(request.getLeaveType(), -request.getNumberOfDays());
-        e.updateUsedLeaves(request.getLeaveType(), request.getNumberOfDays());
+        //deducts from the available balance
+        employee.updateLeaveBalance(request.getLeaveType(), -request.getNumberOfDays());
+
+        //adds to the used leave total
+        employee.updateUsedLeaves(request.getLeaveType(), request.getNumberOfDays());
+
         if (request.getLeaveType() == LeaveType.MATERNITY_LEAVE) {
-            e.incrementMaternityLeaves();
+            employee.incrementMaternityLeaves();
         }
         if (request.getLeaveType() == LeaveType.PARENTAL_LEAVE) {
-            e.incrementParentalLeaves();
+            employee.incrementParentalLeaves();
         }
+
         request.setStatus(LeaveStatus.APPROVED);
         request.setApprovedBy(approverId);
     }
@@ -70,10 +75,10 @@ public class LeaveService {
         r.setApprovedBy(apprId);
     }
 
-    public List<LeaveRequest> getLeaveHistoryForEmployee(String empId) {
+    public List<LeaveRequest> getLeaveHistoryForEmployee(String employeeId) {
         List<LeaveRequest> history = new ArrayList<>();
         for (LeaveRequest req : leaveReqs.values()) {
-            if (req.getEmployeeId().equals(empId)) {
+            if (req.getEmployeeId().equals(employeeId)) {
                 history.add(req);
             }
         }
