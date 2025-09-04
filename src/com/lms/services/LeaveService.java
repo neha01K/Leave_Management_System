@@ -70,9 +70,9 @@ public class LeaveService {
         request.setApprovedBy(approverId);
     }
 
-    public void rejectLeave(LeaveRequest r, String apprId) {
-        r.setStatus(LeaveStatus.REJECTED);
-        r.setApprovedBy(apprId);
+    public void rejectLeave(LeaveRequest leaveRequest, String approverId) {
+        leaveRequest.setStatus(LeaveStatus.REJECTED);
+        leaveRequest.setApprovedBy(approverId);
     }
 
     public List<LeaveRequest> getLeaveHistoryForEmployee(String employeeId) {

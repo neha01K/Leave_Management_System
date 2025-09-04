@@ -68,25 +68,23 @@ public class LeaveManagementSystem {
         System.out.println("Type: 1.Executive 2.Lead 3.Manager");
         int type = scanner.nextInt();
         scanner.nextLine();
+
         EmployeeType employeeType;
         switch(type){
-            case 1:
-                employeeType = EmployeeType.EXECUTIVE;
-                break;
-            case 2:
-                employeeType = EmployeeType.LEAD;
-                break;
-            case 3:
-                employeeType = EmployeeType.MANAGER;
-                break;
-            default:
-                employeeType = EmployeeType.EXECUTIVE;
+            case 1: employeeType = EmployeeType.EXECUTIVE; break;
+            case 2: employeeType = EmployeeType.LEAD; break;
+            case 3: employeeType = EmployeeType.MANAGER; break;
+            default: employeeType = EmployeeType.EXECUTIVE;
                 System.out.println("Invalid choice so default Executive");
         }
+
         System.out.print("Joining date (YYYY-MM-DD): ");
         LocalDate joiningDate = LocalDate.parse(scanner.nextLine());
 
         Employee employee = employeeService.createEmployee(name,email,employeeType,joiningDate);
+
+        com.lms.utils.EmployeePropertiesUtil.saveEmployee(employee);
+
         System.out.println("Registered! ID: " + employee.getEmployeeId());
     }
 
@@ -259,8 +257,14 @@ public class LeaveManagementSystem {
     }
 
     void showEmployees(){
-        for(Employee employee : employeeService.getAllEmployees().values()){
-            System.out.println(employee);
+        List<Employee> employees = com.lms.utils.EmployeePropertiesUtil.loadEmployees();
+
+        if (employees.isEmpty()) {
+            System.out.println("No employees found!");
+        } else {
+            for (Employee e : employees) {
+                System.out.println(e);
+            }
         }
     }
 

@@ -30,6 +30,18 @@ public class Employee {
         initializeLeaveBalance();
     }
 
+    public Employee(String employeeId, String name, String email, EmployeeType type, LocalDate joiningDate) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.type = type;
+        this.joiningDate = joiningDate;
+        this.leaveBalance = new HashMap<>();
+        this.usedLeaves = new HashMap<>();
+        initializeLeaveBalance();
+    }
+
+
     private String generateEmployeeId() {
         return "EMP" + System.currentTimeMillis() % 10000;
     }
