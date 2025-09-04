@@ -257,13 +257,13 @@ public class LeaveManagementSystem {
     }
 
     void showEmployees(){
-        List<Employee> employees = com.lms.utils.EmployeePropertiesUtil.loadEmployees();
+        List<Employee> employeeList = com.lms.utils.EmployeePropertiesUtil.loadEmployees();
 
-        if (employees.isEmpty()) {
+        if (employeeList.isEmpty()) {
             System.out.println("No employees found!");
         } else {
-            for (Employee e : employees) {
-                System.out.println(e);
+            for (Employee employee : employeeList) {
+                System.out.println(employee);
             }
         }
     }
