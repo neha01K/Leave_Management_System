@@ -24,7 +24,7 @@ public class LeaveServiceTest {
 
         leaveService.rejectLeave(leaveRequest,approverID);
 
-        assertEquals(LeaveStatus.REJECTED, leaveRequest.getStatus());
+        assertEquals(LeaveStatus.REJECTED, leaveRequest.getLeaveStatus());
     }
 
     @Test
@@ -38,6 +38,6 @@ public class LeaveServiceTest {
 
         leaveService.approveLeave(leaveRequest, approverID);
 
-        assertEquals(LeaveStatus.APPROVED, leaveRequest.getStatus());
+        assertEquals(LeaveStatus.APPROVED, leaveRequest.getLeaveStatus());
     }
 }
