@@ -16,54 +16,54 @@ public class EmployeeService {
     }
 
     // Create a new employee and assign manager if needed
-    public Employee createEmployee(String name, String email, EmployeeType type, LocalDate joiningDate) {
-        Employee newEmployee = new Employee(name, email, type, joiningDate);
+    public Employee createEmployee(String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
+        Employee newEmployee = new Employee(employeeName, employeeEmail, employeeType, employeeJoiningDate);
 
-        if (type == EmployeeType.EXECUTIVE) {
-            String leadId = findFirstLeadId();
-            if (leadId != null) {
-                newEmployee.setManagerId(leadId);
+        if (employeeType == EmployeeType.EXECUTIVE) {
+            String leadID = findFirstLeadID();
+            if (leadID != null) {
+                newEmployee.setManagerID(leadID);
             }
-        } else if (type == EmployeeType.LEAD) {
-            String managerId = findFirstManagerId();
-            if (managerId != null) {
-                newEmployee.setManagerId(managerId);
+        } else if (employeeType == EmployeeType.LEAD) {
+            String managerID = findFirstManagerID();
+            if (managerID != null) {
+                newEmployee.setManagerID(managerID);
             }
         }
 
-        employees.put(newEmployee.getEmployeeId(), newEmployee);
+        employees.put(newEmployee.getEmployeeID(), newEmployee);
         return newEmployee;
     }
 
-    public Employee getEmployee(String employeeId) throws EmployeeNotFound{
-        if(employeeId==null || employeeId.trim().isEmpty()){
+    public Employee getEmployee(String employeeID) throws EmployeeNotFound{
+        if(employeeID==null || employeeID.trim().isEmpty()){
             throw new EmployeeNotFound("Employee ID cannot be null or empty");
         }
 
-        Employee employee = employees.get(employeeId);
+        Employee employee = employees.get(employeeID);
         if(employee == null){
-            throw new EmployeeNotFound(employeeId);
+            throw new EmployeeNotFound(employeeID);
         }
-        return employees.get(employeeId);
+        return employees.get(employeeID);
     }
 
     public Map<String, Employee> getAllEmployees() {
         return employees;
     }
 
-    private String findFirstLeadId() {
+    private String findFirstLeadID() {
         for (Employee employee : employees.values()) {
-            if (employee.getType() == EmployeeType.LEAD) {
-                return employee.getEmployeeId();
+            if (employee.getEmployeeType() == EmployeeType.LEAD) {
+                return employee.getEmployeeID();
             }
         }
         return null;
     }
 
-    private String findFirstManagerId() {
+    private String findFirstManagerID() {
         for (Employee employee : employees.values()) {
-            if (employee.getType() == EmployeeType.MANAGER) {
-                return employee.getEmployeeId();
+            if (employee.getEmployeeType() == EmployeeType.MANAGER) {
+                return employee.getEmployeeID();
             }
         }
         return null;

@@ -7,89 +7,89 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class LeaveRequest {
-    private String requestId;
-    private String employeeId;
+    private String leaveRequestID;
+    private String employeeID;
     private LeaveType leaveType;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private int numberOfDays;
-    private String reason;
-    private LeaveStatus status;
-    private String approvedBy;
-    private LocalDate requestDate;
+    private LocalDate leaveStartDate;
+    private LocalDate leaveEndDate;
+    private int numberOfDaysOfLeave;
+    private String leaveReason;
+    private LeaveStatus leaveStatus;
+    private String leaveApprovedBy;
+    private LocalDate leaveRequestDate;
     private String medicalCertificate;
     private String parenthoodCertificate;
 
-    public LeaveRequest(String employeeId, LeaveType leaveType, LocalDate startDate,
-                        LocalDate endDate, String reason) throws InvalidDateRange {
-        this.requestId = generateRequestId();
-        this.employeeId = employeeId;
+    public LeaveRequest(String employeeID, LeaveType leaveType, LocalDate leaveStartDate,
+                        LocalDate leaveEndDate, String leaveReason) throws InvalidDateRange {
+        this.leaveRequestID = generateLeaveRequestID();
+        this.employeeID = employeeID;
         this.leaveType = leaveType;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.numberOfDays = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        this.reason = reason;
-        this.status = LeaveStatus.PENDING;
-        this.requestDate = LocalDate.now();
+        this.leaveStartDate = leaveStartDate;
+        this.leaveEndDate = leaveEndDate;
+        this.numberOfDaysOfLeave = (int) ChronoUnit.DAYS.between(leaveStartDate, leaveEndDate) + 1;
+        this.leaveReason = leaveReason;
+        this.leaveStatus = LeaveStatus.PENDING;
+        this.leaveRequestDate = LocalDate.now();
     }
 
-    private String generateRequestId() {
+    private String generateLeaveRequestID() {
         return "REQ" + System.currentTimeMillis() % 10000;
     }
 
     // Getters and Setters
-    public String getRequestId() {
-        return requestId;
+    public String getLeaveRequestID() {
+        return leaveRequestID;
     }
-    public String getEmployeeId() {
-        return employeeId;
+    public String getEmployeeID() {
+        return employeeID;
     }
     public LeaveType getLeaveType() {
         return leaveType;
     }
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getLeaveStartDate() {
+        return leaveStartDate;
     }
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getLeaveEndDate() {
+        return leaveEndDate;
     }
-    public int getNumberOfDays() {
-        return numberOfDays;
+    public int getNumberOfDaysOfLeave() {
+        return numberOfDaysOfLeave;
     }
-    public String getReason() {
-        return reason;
+    public String getLeaveReason() {
+        return leaveReason;
     }
-    public LeaveStatus getStatus() {
-        return status;
+    public LeaveStatus getLeaveStatus() {
+        return leaveStatus;
     }
-    public void setStatus(LeaveStatus status) {
-        this.status = status;
+    public void setLeaveStatus(LeaveStatus leaveStatus) {
+        this.leaveStatus = leaveStatus;
     }
-    public String getApprovedBy() {
-        return approvedBy;
+    public String getLeaveApprovedBy() {
+        return leaveApprovedBy;
     }
-    public void setApprovedBy(String approvedBy) {
-        this.approvedBy = approvedBy;
+    public void setLeaveApprovedBy(String leaveApprovedBy) {
+        this.leaveApprovedBy = leaveApprovedBy;
     }
-    public LocalDate getRequestDate() {
-        return requestDate;
+    public LocalDate getLeaveRequestDate() {
+        return leaveRequestDate;
     }
     public String getMedicalCertificate() {
         return medicalCertificate;
     }
-    public void setMedicalCertificate(String cert) {
-        this.medicalCertificate = cert;
+    public void setMedicalCertificate(String medicalCertificate) {
+        this.medicalCertificate = medicalCertificate;
     }
     public String getParenthoodCertificate() {
         return parenthoodCertificate;
     }
-    public void setParenthoodCertificate(String cert) {
-        this.parenthoodCertificate = cert;
+    public void setParenthoodCertificate(String parenthoodCertificate) {
+        this.parenthoodCertificate = parenthoodCertificate;
     }
 
     @Override
     public String toString() {
         return String.format("Request ID: %s, Employee: %s, Type: %s, Period: %s to %s (%d days), Status: %s",
-                requestId, employeeId, leaveType, startDate, endDate, numberOfDays, status);
+                leaveRequestID, employeeID, leaveType, leaveStartDate, leaveEndDate, numberOfDaysOfLeave, leaveStatus);
     }
 }

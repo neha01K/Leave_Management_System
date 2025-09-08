@@ -8,41 +8,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Employee {
-    private String employeeId;
-    private String name;
-    private String email;
-    private EmployeeType type;
-    private String managerId;
-    private LocalDate joiningDate;
-    private Map<LeaveType, Integer> leaveBalance;
-    private Map<LeaveType, Integer> usedLeaves;
+    private String employeeID;
+    private String employeeName;
+    private String employeeEmail;
+    private EmployeeType employeeType;
+    private String managerID;
+    private LocalDate employeeJoiningDate;
+    private Map<LeaveType, Integer> employeeLeaveBalance;
+    private Map<LeaveType, Integer> employeeUsedLeaves;
     private int maternityLeavesUsed = 0;
     private int parentalLeavesUsed = 0;
 
-    public Employee(String name, String email, EmployeeType type, LocalDate joiningDate) {
-        this.employeeId = generateEmployeeId();
-        this.name = name;
-        this.email = email;
-        this.type = type;
-        this.joiningDate = joiningDate;
-        this.leaveBalance = new HashMap<>();
-        this.usedLeaves = new HashMap<>();
+    public Employee(String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
+        this.employeeID = generateEmployeeID();
+        this.employeeName = employeeName;
+        this.employeeEmail = employeeEmail;
+        this.employeeType = employeeType;
+        this.employeeJoiningDate = employeeJoiningDate;
+        this.employeeLeaveBalance = new HashMap<>();
+        this.employeeUsedLeaves = new HashMap<>();
         initializeLeaveBalance();
     }
 
-    public Employee(String employeeId, String name, String email, EmployeeType type, LocalDate joiningDate) {
-        this.employeeId = employeeId;
-        this.name = name;
-        this.email = email;
-        this.type = type;
-        this.joiningDate = joiningDate;
-        this.leaveBalance = new HashMap<>();
-        this.usedLeaves = new HashMap<>();
+    public Employee(String employeeID, String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
+        this.employeeID = employeeID;
+        this.employeeName = employeeName;
+        this.employeeEmail = employeeEmail;
+        this.employeeType = employeeType;
+        this.employeeJoiningDate = employeeJoiningDate;
+        this.employeeLeaveBalance = new HashMap<>();
+        this.employeeUsedLeaves = new HashMap<>();
         initializeLeaveBalance();
     }
 
 
-    private String generateEmployeeId() {
+    private String generateEmployeeID() {
         return "EMP" + System.currentTimeMillis() % 10000;
     }
 
@@ -50,54 +50,54 @@ public class Employee {
         LocalDate currentDate = LocalDate.now();
         int monthsWorked = (int) ChronoUnit.MONTHS.between(
                 LocalDate.of(currentDate.getYear(), 1, 1),
-                joiningDate.isAfter(LocalDate.of(currentDate.getYear(), 1, 1)) ?
-                        joiningDate : LocalDate.of(currentDate.getYear(), 1, 1)
+                employeeJoiningDate.isAfter(LocalDate.of(currentDate.getYear(), 1, 1)) ?
+                        employeeJoiningDate : LocalDate.of(currentDate.getYear(), 1, 1)
         );
 
         for (LeaveType type : LeaveType.values()) {
             int allocation = type.getYearlyAllocation();
 
             if ((type == LeaveType.CASUAL_LEAVE || type == LeaveType.SICK_LEAVE) &&
-                    joiningDate.getYear() == currentDate.getYear() && monthsWorked > 0) {
+                    employeeJoiningDate.getYear() == currentDate.getYear() && monthsWorked > 0) {
                 allocation = (allocation * (12 - monthsWorked)) / 12;
             }
 
-            leaveBalance.put(type, allocation);
-            usedLeaves.put(type, 0);
+            employeeLeaveBalance.put(type, allocation);
+            employeeUsedLeaves.put(type, 0);
         }
 
-        if (joiningDate.getYear() == currentDate.getYear()) {
-            int monthsCompleted = (int) ChronoUnit.MONTHS.between(joiningDate, currentDate);
-            leaveBalance.put(LeaveType.EARNED_LEAVE, (int) (monthsCompleted * 1.25));
+        if (employeeJoiningDate.getYear() == currentDate.getYear()) {
+            int monthsCompleted = (int) ChronoUnit.MONTHS.between(employeeJoiningDate, currentDate);
+            employeeLeaveBalance.put(LeaveType.EARNED_LEAVE, (int) (monthsCompleted * 1.25));
         }
     }
 
     // Getters and Setters
-    public String getEmployeeId() { return employeeId; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public EmployeeType getType() { return type; }
-    public String getManagerId() { return managerId; }
-    public void setManagerId(String managerId) { this.managerId = managerId; }
-    public LocalDate getJoiningDate() { return joiningDate; }
-    public Map<LeaveType, Integer> getLeaveBalance() { return leaveBalance; }
-    public Map<LeaveType, Integer> getUsedLeaves() { return usedLeaves; }
-    public int getMaternityLeavesUsed() { return maternityLeavesUsed; }
-    public int getParentalLeavesUsed() { return parentalLeavesUsed; }
+    public String getEmployeeID() { return employeeID; }
+    public String getEmployeeName() { return employeeName; }
+    public String getEmployeeEmail() { return employeeEmail; }
+    public EmployeeType getEmployeeType() { return employeeType; }
+    public String getManagerID() { return managerID; }
+    public void setManagerID(String managerId) { this.managerID = managerId; }
+    public LocalDate getEmployeeJoiningDate() { return employeeJoiningDate; }
+    public Map<LeaveType, Integer> getEmployeeLeaveBalance() { return employeeLeaveBalance; }
+    public Map<LeaveType, Integer> getEmployeeUsedLeaves() { return employeeUsedLeaves; }
+    public int getEmployeeMaternityLeavesUsed() { return maternityLeavesUsed; }
+    public int getEmployeeParentalLeavesUsed() { return parentalLeavesUsed; }
     public void incrementMaternityLeaves() { this.maternityLeavesUsed++; }
     public void incrementParentalLeaves() { this.parentalLeavesUsed++; }
 
-    public void updateLeaveBalance(LeaveType type, int days) {
-        leaveBalance.put(type, leaveBalance.getOrDefault(type, 0) + days);
+    public void updateEmployeeLeaveBalance(LeaveType LeaveType, int numberOfLeavedays) {
+        employeeLeaveBalance.put(LeaveType, employeeLeaveBalance.getOrDefault(LeaveType, 0) + numberOfLeavedays);
     }
 
-    public void updateUsedLeaves(LeaveType type, int days) {
-        usedLeaves.put(type, usedLeaves.getOrDefault(type, 0) + days);
+    public void updateEmployeeUsedLeaves(LeaveType LeaveType, int numberOfLeavedays) {
+        employeeUsedLeaves.put(LeaveType, employeeUsedLeaves.getOrDefault(LeaveType, 0) + numberOfLeavedays);
     }
 
     @Override
     public String toString() {
         return String.format("ID: %s, Name: %s, Type: %s, Manager: %s",
-                employeeId, name, type, managerId);
+                employeeID, employeeName, employeeType, managerID);
     }
 }

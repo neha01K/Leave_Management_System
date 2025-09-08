@@ -23,16 +23,16 @@ public class EmployeePropertiesUtil {
 
 
         int index = 1;
-        while (properties.containsKey("employee." + index + ".id")) {
+        while (properties.containsKey("EMPLOYEE." + index + ".ID")) {
             index++;
         }
 
-        String prefix = "employee." + index;
-        properties.setProperty(prefix + ".id", employee.getEmployeeId());
-        properties.setProperty(prefix + ".name", employee.getName());
-        properties.setProperty(prefix + ".email", employee.getEmail());
-        properties.setProperty(prefix + ".type", employee.getType().name());
-        properties.setProperty(prefix + ".joiningDate", employee.getJoiningDate().toString());
+        String prefix = "EMPLOYEE." + index;
+        properties.setProperty(prefix + ".ID", employee.getEmployeeID());
+        properties.setProperty(prefix + ".NAME", employee.getEmployeeName());
+        properties.setProperty(prefix + ".EMAIL", employee.getEmployeeEmail());
+        properties.setProperty(prefix + ".TYPE", employee.getEmployeeType().name());
+        properties.setProperty(prefix + ".joiningdate", employee.getEmployeeJoiningDate().toString());
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH)) {
             properties.store(fileOutputStream, "Employee Data");
@@ -55,20 +55,20 @@ public class EmployeePropertiesUtil {
 
         Set<String> prefixes = new HashSet<>();
         for (String key : properties.stringPropertyNames()) {
-            if (key.startsWith("employee.") && key.endsWith(".id")) {
+            if (key.startsWith("EMPLOYEE.") && key.endsWith(".ID")) {
                 prefixes.add(key.substring(0, key.lastIndexOf(".")));
             }
         }
 
         for (String prefix : prefixes) {
-            String id = properties.getProperty(prefix + ".id");
-            String name = properties.getProperty(prefix + ".name");
-            String email = properties.getProperty(prefix + ".email");
-            EmployeeType type = EmployeeType.valueOf(properties.getProperty(prefix + ".type"));
-            LocalDate joiningDate = LocalDate.parse(properties.getProperty(prefix + ".joiningDate"));
+            String employeeID = properties.getProperty(prefix + ".ID");
+            String employeeName = properties.getProperty(prefix + ".NAME");
+            String employeeEmail = properties.getProperty(prefix + ".EMAIL");
+            EmployeeType employeeType = EmployeeType.valueOf(properties.getProperty(prefix + ".TYPE"));
+            LocalDate employeeJoiningDate = LocalDate.parse(properties.getProperty(prefix + ".joiningdate"));
 
-            Employee emp = new Employee(id, name, email, type, joiningDate);
-            employees.add(emp);
+            Employee employee = new Employee(employeeID, employeeName, employeeEmail, employeeType, employeeJoiningDate);
+            employees.add(employee);
         }
 
         return employees;

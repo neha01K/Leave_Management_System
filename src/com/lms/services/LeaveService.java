@@ -11,37 +11,37 @@ import java.util.*;
 
 public class LeaveService {
 
-    Map<String, LeaveRequest> leaveReqs;
-    EmployeeService empService;
+    Map<String, LeaveRequest> leaveRequest;
+    EmployeeService employeeService;
 
-    public LeaveService(EmployeeService empService) {
-        leaveReqs = new HashMap<>();
-        this.empService = empService;
+    public LeaveService(EmployeeService employeeService) {
+        leaveRequest = new HashMap<>();
+        this.employeeService = employeeService;
     }
 
     public void submitLeaveRequest(LeaveRequest request) {
-        leaveReqs.put(request.getRequestId(), request);
+        leaveRequest.put(request.getLeaveRequestID(), request);
     }
 
-    public List<LeaveRequest> getPendingRequestsForApprover(String apprId) throws EmployeeNotFound {
+    public List<LeaveRequest> getPendingRequestsForApprover(String approverID) throws EmployeeNotFound {
 
-        Employee approver = empService.getEmployee(apprId);
+        Employee approver = employeeService.getEmployee(approverID);
         List<LeaveRequest> pendingRequests = new ArrayList<>();
 
-        for (LeaveRequest request : leaveReqs.values()) {
+        for (LeaveRequest leaveRequest : leaveRequest.values()) {
 
-            if (request.getStatus() == LeaveStatus.PENDING) {
-                Employee employee = empService.getEmployee(request.getEmployeeId());
+            if (leaveRequest.getLeaveStatus() == LeaveStatus.PENDING) {
+                Employee employee = employeeService.getEmployee(leaveRequest.getEmployeeID());
 
                 if (employee != null) {
 
-                    if (approver.getType() == EmployeeType.MANAGER) {
-                        pendingRequests.add(request);
+                    if (approver.getEmployeeType() == EmployeeType.MANAGER) {
+                        pendingRequests.add(leaveRequest);
                     }
-                    else if (approver.getType() == EmployeeType.LEAD) {
-                        if (employee.getType() == EmployeeType.EXECUTIVE &&
-                                apprId.equals(employee.getManagerId())) {
-                            pendingRequests.add(request);
+                    else if (approver.getEmployeeType() == EmployeeType.LEAD) {
+                        if (employee.getEmployeeType() == EmployeeType.EXECUTIVE &&
+                                approverID.equals(employee.getManagerID())) {
+                            pendingRequests.add(leaveRequest);
                         }
                     }
                 }
@@ -50,38 +50,38 @@ public class LeaveService {
         return pendingRequests;
     }
 
-    public void approveLeave(LeaveRequest request, String approverId) throws EmployeeNotFound{
-        Employee employee = empService.getEmployee(request.getEmployeeId());
+    public void approveLeave(LeaveRequest leaveRequest, String approverID) throws EmployeeNotFound{
+        Employee employee = employeeService.getEmployee(leaveRequest.getEmployeeID());
 
         //deducts from the available balance
-        employee.updateLeaveBalance(request.getLeaveType(), -request.getNumberOfDays());
+        employee.updateEmployeeLeaveBalance(leaveRequest.getLeaveType(), -leaveRequest.getNumberOfDaysOfLeave());
 
         //adds to the used leave total
-        employee.updateUsedLeaves(request.getLeaveType(), request.getNumberOfDays());
+        employee.updateEmployeeUsedLeaves(leaveRequest.getLeaveType(), leaveRequest.getNumberOfDaysOfLeave());
 
-        if (request.getLeaveType() == LeaveType.MATERNITY_LEAVE) {
+        if (leaveRequest.getLeaveType() == LeaveType.MATERNITY_LEAVE) {
             employee.incrementMaternityLeaves();
         }
-        if (request.getLeaveType() == LeaveType.PARENTAL_LEAVE) {
+        if (leaveRequest.getLeaveType() == LeaveType.PARENTAL_LEAVE) {
             employee.incrementParentalLeaves();
         }
 
-        request.setStatus(LeaveStatus.APPROVED);
-        request.setApprovedBy(approverId);
+        leaveRequest.setLeaveStatus(LeaveStatus.APPROVED);
+        leaveRequest.setLeaveApprovedBy(approverID);
     }
 
-    public void rejectLeave(LeaveRequest leaveRequest, String approverId) {
-        leaveRequest.setStatus(LeaveStatus.REJECTED);
-        leaveRequest.setApprovedBy(approverId);
+    public void rejectLeave(LeaveRequest leaveRequest, String approverID) {
+        leaveRequest.setLeaveStatus(LeaveStatus.REJECTED);
+        leaveRequest.setLeaveApprovedBy(approverID);
     }
 
-    public List<LeaveRequest> getLeaveHistoryForEmployee(String employeeId) {
-        List<LeaveRequest> history = new ArrayList<>();
-        for (LeaveRequest req : leaveReqs.values()) {
-            if (req.getEmployeeId().equals(employeeId)) {
-                history.add(req);
+    public List<LeaveRequest> getLeaveHistoryForEmployee(String employeeID) {
+        List<LeaveRequest> employeeLeaveHistory = new ArrayList<>();
+        for (LeaveRequest leaveRequest : leaveRequest.values()) {
+            if (leaveRequest.getEmployeeID().equals(employeeID)) {
+                employeeLeaveHistory.add(leaveRequest);
             }
         }
-        return history;
+        return employeeLeaveHistory;
     }
 }
