@@ -87,12 +87,12 @@ public class Employee {
     public void incrementMaternityLeaves() { this.maternityLeavesUsed++; }
     public void incrementParentalLeaves() { this.parentalLeavesUsed++; }
 
-    public void updateEmployeeLeaveBalance(LeaveType LeaveType, int numberOfLeavedays) {
-        employeeLeaveBalance.put(LeaveType, employeeLeaveBalance.getOrDefault(LeaveType, 0) + numberOfLeavedays);
+    public void updateEmployeeLeaveBalance(LeaveType LeaveType, int numberOfLeaveDays) {
+        employeeLeaveBalance.put(LeaveType, employeeLeaveBalance.getOrDefault(LeaveType, 0) + numberOfLeaveDays);
     }
 
-    public void updateEmployeeUsedLeaves(LeaveType LeaveType, int numberOfLeavedays) {
-        employeeUsedLeaves.put(LeaveType, employeeUsedLeaves.getOrDefault(LeaveType, 0) + numberOfLeavedays);
+    public void updateEmployeeUsedLeaves(LeaveType LeaveType, int numberOfLeaveDays) {
+        employeeUsedLeaves.put(LeaveType, employeeUsedLeaves.getOrDefault(LeaveType, 0) + numberOfLeaveDays);
     }
 
     @Override
