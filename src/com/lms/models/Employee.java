@@ -88,7 +88,7 @@ public class Employee {
     public void incrementParentalLeaves() { this.parentalLeavesUsed++; }
 
     public void updateEmployeeLeaveBalance(LeaveType LeaveType, int numberOfLeaveDays) {
-        employeeLeaveBalance.put(LeaveType, employeeLeaveBalance.getOrDefault(LeaveType, 0) + numberOfLeaveDays);
+        employeeLeaveBalance.put(LeaveType, employeeLeaveBalance.getOrDefault(LeaveType, 0) - numberOfLeaveDays);
     }
 
     public void updateEmployeeUsedLeaves(LeaveType LeaveType, int numberOfLeaveDays) {
