@@ -30,6 +30,9 @@ public class EmployeeService {
                 newEmployee.setManagerID(managerID);
             }
         }
+        if(newEmployee.getEmployeeType()==null){
+            throw new NullPointerException("Employee Type can't be Null");
+        }
 
         employees.put(newEmployee.getEmployeeID(), newEmployee);
         return newEmployee;

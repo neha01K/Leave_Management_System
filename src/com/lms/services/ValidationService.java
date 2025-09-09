@@ -24,6 +24,9 @@ public class ValidationService {
                 return false;
             }
         }
+
+        if(leaveType==null) return false;
+
         return true;
     }
 
@@ -35,7 +38,7 @@ public class ValidationService {
         int leaveBalance = employee.getEmployeeLeaveBalance().getOrDefault(leaveType, 0);
 
         if(leaveStartDate==null || leaveEndDate==null){
-            throw new InvalidDateRange("Start Date and End Date cannot be null");
+            throw new NullPointerException("Leave Start or End Date can't be Null");
         }
 
         if(leaveStartDate.isAfter(leaveEndDate)){

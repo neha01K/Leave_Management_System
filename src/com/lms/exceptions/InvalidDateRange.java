@@ -17,6 +17,10 @@ public class InvalidDateRange extends LMSException{
         super(message);
     }
 
+    public InvalidDateRange(String message, Throwable cause){
+        super(message, cause);
+    }
+
     public LocalDate getStartDate(){
         return startDate;
     }
