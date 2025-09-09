@@ -15,6 +15,10 @@ public class EmployeeService {
         employees = new HashMap<>();
     }
 
+    public void addEmployee(Employee employee){
+        employees.put(employee.getEmployeeID(), employee);
+    }
+
     // Create a new employee and assign manager if needed
     public Employee createEmployee(String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
         Employee newEmployee = new Employee(employeeName, employeeEmail, employeeType, employeeJoiningDate);

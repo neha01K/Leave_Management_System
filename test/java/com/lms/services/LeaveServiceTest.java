@@ -34,7 +34,11 @@ public class LeaveServiceTest {
 
     @Test
     public void shouldSetApprovedStatusOnLeave_WhenApproved() throws EmployeeNotFound, InvalidDateRange {
-        LeaveService leaveService = new LeaveService(new EmployeeService());
+        EmployeeService employeeService = new EmployeeService();
+        LeaveService leaveService = new LeaveService(employeeService);
+
+        employeeService.addEmployee(employee);
+
         LeaveRequest leaveRequest = new LeaveRequest(employeeID, LeaveType.CASUAL_LEAVE,
                 LocalDate.of(2025, 9, 10), LocalDate.of(2025,9,12),
                 "Family Function");
