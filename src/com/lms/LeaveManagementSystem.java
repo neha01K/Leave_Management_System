@@ -108,7 +108,7 @@ public class LeaveManagementSystem {
         //Employee employee = employeeService.getEmployee(employeeID);
 
         try{
-            employee = employeeDAO.getEmployeeDetailByID(employeeID);
+            employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
             if(employee==null) {
                 throw new EmployeeNotFound("Employee with ID: "+employeeID+ " not found");
             }
@@ -124,7 +124,7 @@ public class LeaveManagementSystem {
     void employeeMenu(String employeeID) throws EmployeeNotFound, InvalidLeaveRequest, InvalidDateRange {
         //Employee employee = employeeService.getEmployee(employeeID);
 
-        Employee employee = employeeDAO.getEmployeeDetailByID(employeeID);
+        Employee employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
 
         while(true){
             System.out.println("-----Employee Menu-----");
@@ -181,7 +181,7 @@ public class LeaveManagementSystem {
     void requestForLeave(String employeeID) throws InvalidLeaveRequest, InvalidDateRange {
 
         try{
-            employee = employeeDAO.getEmployeeDetailByID(employeeID);
+            employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
             if(employee==null) {
                 throw new EmployeeNotFound("Employee with ID: "+employeeID+ " not found");
             }
@@ -277,7 +277,7 @@ public class LeaveManagementSystem {
     void checkLeaveBalance(String employeeID) {
 
         try{
-            employee = employeeDAO.getEmployeeDetailByID(employeeID);
+            employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
             if(employee==null) {
                 throw new EmployeeNotFound("Employee with ID: "+employeeID+ " not found");
             }
@@ -294,7 +294,7 @@ public class LeaveManagementSystem {
     void checkLeaveHistory(String employeeID){
 
         try{
-            employee = employeeDAO.getEmployeeDetailByID(employeeID);
+            employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
             if(employee==null) {
                 throw new EmployeeNotFound("Employee with ID: "+employeeID+ " not found");
             }

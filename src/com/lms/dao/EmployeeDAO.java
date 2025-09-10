@@ -57,7 +57,7 @@ public class EmployeeDAO {
         return employeesList;
     }
 
-    public Employee getEmployeeDetailByID(String employeeID) {
+    public Employee getEmployeeDetailByEmployeeID(String employeeID) {
 
         String sqlQuery = "SELECT * FROM employees_details WHERE employee_id=?";
 
