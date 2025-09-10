@@ -42,7 +42,7 @@ public class EmployeePropertiesUtil {
         }
     }
 
-    public static List<Employee> loadEmployees() {
+    public static List<Employee> getAllEmployeesDetails() {
         List<Employee> employees = new ArrayList<>();
         Properties properties = new Properties();
 

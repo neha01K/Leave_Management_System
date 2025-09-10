@@ -7,5 +7,6 @@ public class EmployeeNotFound extends LMSException{
 
     public EmployeeNotFound(String message, Throwable cause) {
         super(message, cause);
+        System.out.println("No Employee found with these details!");
     }
 }
