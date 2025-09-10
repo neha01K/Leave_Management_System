@@ -27,7 +27,7 @@ public class EmployeeDAO {
             preparedStatement.executeUpdate();
         }
         catch (SQLException exception) {
-            exception.printStackTrace();
+            System.out.println(exception.getMessage());
         }
     }
 
