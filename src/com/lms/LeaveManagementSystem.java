@@ -1,5 +1,6 @@
 package com.lms;
 
+import com.lms.dao.EmployeeDAOInterface;
 import com.lms.exceptions.EmployeeNotFound;
 import com.lms.exceptions.InvalidDateRange;
 import com.lms.exceptions.InvalidLeaveRequest;
@@ -23,7 +24,7 @@ public class LeaveManagementSystem {
     private EmployeeService employeeService;
     private LeaveService leaveService;
     private ValidationService validateService;
-    private EmployeeDAO employeeDAO;
+    private EmployeeDAOInterface employeeDAO;
     private Employee employee;
 
 

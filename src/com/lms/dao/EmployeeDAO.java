@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDAO {
+public class EmployeeDAO  implements EmployeeDAOInterface{
 
     public void saveEmployee(Employee employee) {
 
