@@ -22,6 +22,7 @@ public class LeaveRequest {
 
     public LeaveRequest(String employeeID, LeaveType leaveType, LocalDate leaveStartDate,
                         LocalDate leaveEndDate, String leaveReason) throws InvalidDateRange {
+        System.out.println("Hello Git");
         this.leaveRequestID = generateLeaveRequestID();
         this.employeeID = employeeID;
         this.leaveType = leaveType;
