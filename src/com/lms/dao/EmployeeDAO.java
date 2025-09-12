@@ -5,7 +5,6 @@ import com.lms.models.enums.EmployeeType;
 import com.lms.utils.DBConnection;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +12,8 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
 
     public void saveEmployee(Employee employee) {
 
-        String sqlQuery = "INSERT INTO employees_details(employee_id, name, email, type, joining_date) VALUES (?, ?, ?, ?, ?)";
-
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.INSERT_EMPLOYEE)) {
 
             preparedStatement.setString(1, employee.getEmployeeID());
             preparedStatement.setString(2, employee.getEmployeeName());
@@ -35,10 +32,8 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
 
         List<Employee> employeesList = new ArrayList<>();
 
-        String sqlQuery = "SELECT * FROM employees_details";
-
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_ALL_EMPLOYEES);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -51,7 +46,7 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
                 );
                 employeesList.add(employee);
             }
-        } catch (Exception exception) {
+        } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
         return employeesList;
@@ -59,10 +54,8 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
 
     public Employee getEmployeeDetailByEmployeeID(String employeeID) {
 
-        String sqlQuery = "SELECT * FROM employees_details WHERE employee_id=?";
-
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_EMPLOYEES_BY_ID)) {
 
             preparedStatement.setString(1, employeeID);
 
