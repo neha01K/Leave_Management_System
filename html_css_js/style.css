@@ -1,0 +1,44 @@
+/* CSS applied in the three ways 
+   1. Inline CSS
+   2. Internal CSS   
+   3. External CSS
+   This is an example of External CSS */
+
+
+
+body{
+    background-image: url(background.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+p{
+    color: black;
+    font-style: italic;
+    text-decoration: wavy underline;
+    font-weight: bold;
+    font-size: 1pc;
+
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+
+h1{
+    color: black;
+    font-family: "Press Start 2P", "consolas", 'sans-serif';
+}
+
+/* 
+#p1{
+    color: tomato;
+}
+
+.odd{
+    color:chartreuse
+}
+.even{
+    color:cyan;
+} */
