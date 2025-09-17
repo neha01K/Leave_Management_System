@@ -16,9 +16,4 @@ public class LowCohesionExample {
     public void sendNotification(String studentName, String message) {
         System.out.println("Sending notification to " + studentName + ": " + message);
     }
-
-    public void generateReport() {
-        System.out.println("Generating library report...");
-    }
-
 }
