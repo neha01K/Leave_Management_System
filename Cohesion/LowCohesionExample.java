@@ -1,4 +1,4 @@
-public class LowCouplingExample {
+public class LowCohesionExample {
 
     public void addBook(String title) {
         System.out.println("Book added: " + title);
