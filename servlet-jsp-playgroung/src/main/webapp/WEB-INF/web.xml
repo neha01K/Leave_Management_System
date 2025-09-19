@@ -1,0 +1,28 @@
+<!DOCTYPE web-app PUBLIC
+
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+
+
+<web-app>
+
+    <display-name>Archetype Created Web Application</display-name>
+
+   <!-- <servlet>
+        &lt;!&ndash; A unique name for your servlet &ndash;&gt;
+        <servlet-name>MyServlet</servlet-name>
+        &lt;!&ndash; The fully qualified class name of your Java servlet &ndash;&gt;
+        <servlet-class>com.example.MyServlet</servlet-class>
+    </servlet>
+
+    &lt;!&ndash; 2. MAP the defined servlet to a URL pattern &ndash;&gt;
+    <servlet-mapping>
+        &lt;!&ndash; Must match the servlet-name from the <servlet> tag &ndash;&gt;
+        <servlet-name>MyServlet</servlet-name>
+        &lt;!&ndash; The URL that will trigger this servlet &ndash;&gt;
+        <url-pattern>/SayingHello</url-pattern>
+    </servlet-mapping> -->
+
+</web-app>
