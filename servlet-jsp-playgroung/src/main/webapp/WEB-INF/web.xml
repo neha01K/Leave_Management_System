@@ -1,28 +1,37 @@
-<!DOCTYPE web-app PUBLIC
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
 
-        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    <display-name>servlet-jsp-playground</display-name>
 
-        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+    </welcome-file-list>
 
-
-
-<web-app>
-
-    <display-name>Archetype Created Web Application</display-name>
-
-   <!-- <servlet>
-        &lt;!&ndash; A unique name for your servlet &ndash;&gt;
-        <servlet-name>MyServlet</servlet-name>
-        &lt;!&ndash; The fully qualified class name of your Java servlet &ndash;&gt;
-        <servlet-class>com.example.MyServlet</servlet-class>
+    <servlet>
+        <servlet-name>SecondServlet</servlet-name>
+        <servlet-class>servlets.SecondServlet</servlet-class>
     </servlet>
-
-    &lt;!&ndash; 2. MAP the defined servlet to a URL pattern &ndash;&gt;
     <servlet-mapping>
-        &lt;!&ndash; Must match the servlet-name from the <servlet> tag &ndash;&gt;
-        <servlet-name>MyServlet</servlet-name>
-        &lt;!&ndash; The URL that will trigger this servlet &ndash;&gt;
-        <url-pattern>/SayingHello</url-pattern>
-    </servlet-mapping> -->
+        <servlet-name>SecondServlet</servlet-name>
+        <url-pattern>/second</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ThirdServlet</servlet-name>
+        <servlet-class>servlets.ThirdServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ThirdServlet</servlet-name>
+        <url-pattern>/third</url-pattern>
+    </servlet-mapping>
 
 </web-app>
