@@ -15,7 +15,10 @@
             <p class="paragraph">
                 This is a simple webpage created with HTML and styled with a separate CSS file. It's fully responsive, so it looks great on any device.
             </p>
-            <button class="button">Click Me</button>
+           <form action="<%= application.getContextPath() %>/third" method="post">
+                <input type="text" name="message" placeholder="Enter text here:"/>
+                <button type="submit">Submit</button>
+            </form>
         </div>
 
         <div>
