@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h1 style="font-family: 'Helvetica', monospace;" >Leave Management</h1>
+        <p style="font-family: 'Helvetica', monospace;">Employee Portal</p>
+    </div>x
+
+    <div id="loginForm" class="form-container">
+        <div class="form-group">
+            <label for="employeeId" style="font-family: 'Helvetica', monospace;">Employee ID</label>
+            <input type="text" id="employeeId" placeholder="Enter your Employee ID" required>
+        </div>
+        <div class="form-group">
+            <label for="employeeName" style="font-family: 'Helvetica', monospace;">Employee Name</label>
+            <input type="text" id="employeeName" placeholder="Enter your Full Name" required>
+        </div>
+        <button class="btn" onclick="login()">Login</button>
+        <button class="btn btn-secondary" onclick="showRegisterForm()">Register New Employee</button>
+        <div id="loginError" class="error-message hidden"></div>
+    </div>
+
+    <div id="registerForm" class="form-container hidden">
+        <h3 style="margin-bottom: 20px; color: #333; text-align: center;">Register New Employee</h3>
+        <div class="form-group">
+            <label for="regEmployeeName">Full Name</label>
+            <input type="text" id="regEmployeeName" placeholder="Enter your Full Name" required>
+        </div>
+        <div class="form-group">
+            <label for="regDesignation">Designation</label>
+            <input type="text" id="regDesignation" placeholder="Enter your Designation" required>
+        </div>
+        <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="Enter your Email" required>
+        </div>
+        <div class="form-group">
+            <label for="regJoiningDate">Joining Date</label>
+            <input type="date" id="regJoiningDate" required>
+        </div>
+        <button class="btn" onclick="register()">Register</button>
+        <button class="btn btn-secondary" onclick="showLoginForm()">Back to Login</button>
+        <div id="registerError" class="error-message hidden"></div>
+        <div id="registerSuccess" class="success-message hidden"></div>
+    </div>
+
+    <div id="dashboard" class="form-container hidden">
+        <div class="dashboard">
+            <div class="welcome-message">
+                <strong>Welcome, <span id="welcomeName"></span>!</strong>
+                <div style="font-size: 14px; color: #666; margin-top: 5px;">
+                    ID: <span id="welcomeId"></span>
+                </div>
+            </div>
+            <div class="menu-options">
+                <button class="menu-btn" onclick="showApplyLeave()">
+                    Apply for Leave
+                </button>
+                <button class="menu-btn" onclick="showLeaveBalance()">
+                    Check Leave Balance
+                </button>
+                <button class="menu-btn" onclick="showTakenLeaves()">
+                    View Taken Leaves
+                </button>
+                <button class="menu-btn logout-btn" onclick="logout()">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="applyLeaveForm" class="form-container hidden">
+        <div class="leave-form">
+            <h3 style="margin-bottom: 20px; color: #333;">Apply for Leave</h3>
+            <div class="form-group">
+                <label for="leaveType">Leave Type</label>
+                <select id="leaveType" required>
+                    <option value="">Select Leave Type</option>
+                    <option value="Sick Leave">Sick Leave</option>
+                    <option value="Casual Leave">Casual Leave</option>
+                    <option value="Annual Leave">Annual Leave</option>
+                    <option value="Emergency Leave">Emergency Leave</option>
+                    <option value="Maternity/Paternity Leave">Maternity/Paternity Leave</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="reason">Reason</label>
+                <textarea id="reason" placeholder="Enter reason for leave" required></textarea>
+            </div>
+            <button class="btn" onclick="submitLeaveApplication()">Submit Application</button>
+            <button class="btn back-btn" onclick="showDashboard()">Back to Menu</button>
+            <div id="leaveApplicationError" class="error-message hidden"></div>
+            <div id="leaveApplicationSuccess" class="success-message hidden"></div>
+        </div>
+    </div>
+
+    <div id="leaveBalanceView" class="form-container hidden">
+        <div class="leave-info">
+            <h3>Leave Balance</h3>
+            <div class="leave-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="sickLeaveBalance">12</div>
+                    <div class="stat-label">Sick Leave</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="casualLeaveBalance">15</div>
+                    <div class="stat-label">Casual Leave</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="annualLeaveBalance">21</div>
+                    <div class="stat-label">Annual Leave</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn back-btn" onclick="showDashboard()">Back to Menu</button>
+    </div>
+
+    <div id="takenLeavesView" class="form-container hidden">
+        <div class="leave-info">
+            <h3>Leave History</h3>
+            <div id="leaveHistory">
+            </div>
+        </div>
+        <button class="btn back-btn" onclick="showDashboard()">Back to Menu</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
