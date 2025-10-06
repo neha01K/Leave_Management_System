@@ -2,11 +2,15 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import database.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import queries.QueriesConstant;
+
 import java.sql.*;
 
 @WebServlet("/Register")
@@ -23,15 +27,9 @@ public class Register extends HttpServlet {
             String email = request.getParameter("user_email");
             String password = request.getParameter("user_password");
 
-            try{
+            try(Connection connection = DBConnection.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.REGISTER_USER_QUERY)){
                 Thread.sleep(3000);
-
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration","root", "Hitmanbau1*@sql");
-
-                String query = "insert into user(username, userEmail, userPassword) values(?, ?, ?)";
-
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
 
                 preparedStatement.setString(1, name);
                 preparedStatement.setString(2, email);
