@@ -14,7 +14,7 @@ public class Employee {
     private EmployeeType employeeType;
     private String managerID;
     private LocalDate employeeJoiningDate;
-    private Map<LeaveType, Integer> employeeLeaveBalance;
+    private static Map<LeaveType, Integer> employeeLeaveBalance;
     private Map<LeaveType, Integer> employeeUsedLeaves;
     private int maternityLeavesUsed = 0;
     private int parentalLeavesUsed = 0;
@@ -80,7 +80,7 @@ public class Employee {
     public String getManagerID() { return managerID; }
     public void setManagerID(String managerId) { this.managerID = managerId; }
     public LocalDate getEmployeeJoiningDate() { return employeeJoiningDate; }
-    public Map<LeaveType, Integer> getEmployeeLeaveBalance() { return employeeLeaveBalance; }
+    public static Map<LeaveType, Integer> getEmployeeLeaveBalance() { return employeeLeaveBalance; }
     public Map<LeaveType, Integer> getEmployeeUsedLeaves() { return employeeUsedLeaves; }
     public int getEmployeeMaternityLeavesUsed() { return maternityLeavesUsed; }
     public int getEmployeeParentalLeavesUsed() { return parentalLeavesUsed; }
