@@ -12,12 +12,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/ApplyLeave")
 public class ApplyLeaveServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+        response.sendRedirect(request.getContextPath() + "/");
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         String employeeID = SessionUtils.checkLoggedInEmployee(request, response);
         if(employeeID == null)
             return;
@@ -27,7 +39,7 @@ public class ApplyLeaveServlet extends HttpServlet {
         String leaveEndDate = request.getParameter("leaveEndDate");
         String leaveReason = request.getParameter("leaveReason");
 
-        //response.setContentType("application/json");
+
         PrintWriter out = response.getWriter();
 
         try (Connection connection = DBConnection.getConnection()) {

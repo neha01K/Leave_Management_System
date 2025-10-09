@@ -27,7 +27,7 @@ public class LeaveBalanceServlet extends HttpServlet {
             return;
 
         response.setCharacterEncoding("UTF-8");
-        //response.setContentType("application/json");
+        response.setContentType("application/json");
 
         PrintWriter out = response.getWriter();
 

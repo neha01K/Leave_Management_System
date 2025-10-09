@@ -26,7 +26,7 @@ public class LeaveHistoryServlet extends HttpServlet {
         if(employeeID==null)
             return;
 
-        //response.setContentType("application/json");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
