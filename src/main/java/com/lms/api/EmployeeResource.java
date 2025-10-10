@@ -1,6 +1,6 @@
 package com.lms.api;
 
-import com.lms.queries.QueriesConstantForRegister;
+import com.lms.queries.*;
 import com.lms.util.DBConnection;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -22,7 +22,7 @@ public class EmployeeResource {
 
         try (Connection connection = DBConnection.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstantForRegister.COUNT_EMPLOYEE);
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.COUNT_EMPLOYEE);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             int employeeCount = 0;
@@ -30,7 +30,7 @@ public class EmployeeResource {
 
             String employeeID = "EMP" + String.format("%03d", employeeCount + 1);
 
-            PreparedStatement insertPreparedStatement = connection.prepareStatement(QueriesConstantForRegister.REGISTER_EMPLOYEE);
+            PreparedStatement insertPreparedStatement = connection.prepareStatement(QueriesConstant.REGISTER_EMPLOYEE);
             insertPreparedStatement.setString(1, employeeID);
             insertPreparedStatement.setString(2, employeeName);
             insertPreparedStatement.setString(3, employeeDesignation);
@@ -58,7 +58,7 @@ public class EmployeeResource {
     @Path("/{employeeID}")
     public Response getEmployee(@PathParam("employeeID") String employeeID) {
         try (Connection connection = DBConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstantForRegister.RETRIEVE_EMPLOYEE_DATA);
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.RETRIEVE_EMPLOYEE_DATA);
             preparedStatement.setString(1, employeeID);
 
             ResultSet resultSet = preparedStatement.executeQuery();

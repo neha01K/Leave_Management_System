@@ -13,7 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import static com.lms.queries.QueriesConstantForLeaveBalance.FETCHING_LEAVE_BALANCE;
+import static com.lms.queries.QueriesConstant.FETCHING_LEAVE_BALANCE;
 
 @Path("/leavebalance")
 public class LeaveBalanceResource {

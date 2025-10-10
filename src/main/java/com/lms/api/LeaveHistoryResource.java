@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import static com.lms.queries.QueriesConstantForLeaveHistory.FETCHING_EMPLOYEE_LEAVE_HISTORY;
+import com.lms.queries.*;
 
 
 @Path("/leavehistory")
@@ -38,7 +38,7 @@ public class LeaveHistoryResource {
         JSONArray jsonLeavesArray = new JSONArray();
 
         try(Connection connection = DBConnection.getConnection();
-        PreparedStatement prepareStatement = connection.prepareStatement(FETCHING_EMPLOYEE_LEAVE_HISTORY)){
+        PreparedStatement prepareStatement = connection.prepareStatement(QueriesConstant.FETCHING_EMPLOYEE_LEAVE_HISTORY)){
 
             prepareStatement.setString(1, employeeID);
             ResultSet resultSet = prepareStatement.executeQuery();

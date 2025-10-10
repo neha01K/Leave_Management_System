@@ -1,6 +1,5 @@
 package com.lms.api;
 
-import com.lms.queries.QueriesConstantForApplyLeave;
 import com.lms.util.DBConnection;
 import com.lms.util.SessionUtils;
 import jakarta.servlet.ServletException;
@@ -13,7 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import static com.lms.queries.QueriesConstantForApplyLeave.*;
+import com.lms.queries.*;
 
 @Path("/leave")
 public class LeaveResource {
@@ -31,7 +30,7 @@ public class LeaveResource {
 
         try (Connection connection = DBConnection.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstantForApplyLeave.ADDING_LEAVE_INTO_HISTORY);
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.ADDING_LEAVE_INTO_HISTORY);
             preparedStatement.setString(1, employeeID);
             preparedStatement.setString(2, leaveRequest.leaveType);
             preparedStatement.setString(3, leaveRequest.leaveStartDate);

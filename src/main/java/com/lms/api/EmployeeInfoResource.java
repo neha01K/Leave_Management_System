@@ -1,13 +1,10 @@
 package com.lms.api;
 
-import com.lms.queries.QueriesConstantForRegister;
-import com.lms.util.DBConnection;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.json.JSONObject;
-import java.sql.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
