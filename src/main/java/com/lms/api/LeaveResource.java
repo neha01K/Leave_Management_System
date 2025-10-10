@@ -30,7 +30,7 @@ public class LeaveResource {
 
         try (Connection connection = DBConnection.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.ADDING_LEAVE_INTO_HISTORY);
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.ADDING_INTO_LEAVE_HISTORY);
             preparedStatement.setString(1, employeeID);
             preparedStatement.setString(2, leaveRequest.leaveType);
             preparedStatement.setString(3, leaveRequest.leaveStartDate);

@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.lms.queries.*;
 
 @WebServlet("/LeaveBalance")
 public class LeaveBalanceServlet extends HttpServlet {
@@ -32,9 +33,7 @@ public class LeaveBalanceServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection connection = DBConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM leaveBalance WHERE employeeId=?"
-            );
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.FETCHING_LEAVE_BALANCE);
             preparedStatement.setString(1, employeeID);
             ResultSet resultSet = preparedStatement.executeQuery();
 
