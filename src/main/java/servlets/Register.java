@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.lms.queries.QueriesConstant;
 import com.lms.util.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.*;
 import java.time.LocalDate;
+import com.lms.queries.QueriesConstant;
 
 @WebServlet("/Register")
 public class Register extends HttpServlet {
@@ -29,19 +31,15 @@ public class Register extends HttpServlet {
 
             try(Connection connection = DBConnection.getConnection()) {
 
-                String selectionQuery = "SELECT COUNT(*) FROM employees";
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectionQuery);
+                ResultSet resultSet = statement.executeQuery(QueriesConstant.COUNT_EMPLOYEE);
                 resultSet.next();
 
                 int employeeCount = resultSet.getInt(1);
 
                 String employeeID = "EMP" +  String.format("%03d", employeeCount+1);
 
-                String query = "INSERT INTO employees(employeeId, employeeName, designation, email, joiningDate) " +
-                               "VALUES(?, ?, ?, ?, ?)";
-
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.REGISTER_EMPLOYEE);
 
                 preparedStatement.setString(1,employeeID);
                 preparedStatement.setString(2, name);
@@ -55,13 +53,11 @@ public class Register extends HttpServlet {
                 out.println(employeeID);
                 out.println(name);
 
-                String loginQuery = "INSERT INTO loginDetails(employeeId) VALUES(?)";
-                PreparedStatement preparedStatementForLogin = connection.prepareStatement(loginQuery);
+                PreparedStatement preparedStatementForLogin = connection.prepareStatement(QueriesConstant.INSERT_EMPLOYEE_INTO_LOGIN);
                 preparedStatementForLogin.setString(1, employeeID);
                 preparedStatementForLogin.executeUpdate();
 
-                String leaveBalanceUpdateQuery = "INSERT INTO leaveBalance (employeeId) VALUES (?)";
-                PreparedStatement balanceStatement = connection.prepareStatement(leaveBalanceUpdateQuery);
+                PreparedStatement balanceStatement = connection.prepareStatement(QueriesConstant.LEAVEBALANCE_INITIALIZATION);
                 balanceStatement.setString(1, employeeID);
                 balanceStatement.executeUpdate();
             }

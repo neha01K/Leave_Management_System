@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.lms.queries.QueriesConstant;
 
 @WebServlet("/LeaveHistory")
 public class LeaveHistoryServlet extends HttpServlet {
@@ -26,15 +27,13 @@ public class LeaveHistoryServlet extends HttpServlet {
         if(employeeID==null)
             return;
 
-        //response.setContentType("application/json");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
 
         try (Connection connection = DBConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM leave_history WHERE employeeID=?"
-            );
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.FETCHING_EMPLOYEE_LEAVE_HISTORY);
             preparedStatement.setString(1, employeeID);
             ResultSet resultSet = preparedStatement.executeQuery();
 

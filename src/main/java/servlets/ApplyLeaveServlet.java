@@ -12,12 +12,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import com.lms.queries.*;
 
 @WebServlet("/ApplyLeave")
 public class ApplyLeaveServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+        response.sendRedirect(request.getContextPath() + "/");
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         String employeeID = SessionUtils.checkLoggedInEmployee(request, response);
         if(employeeID == null)
             return;
@@ -27,13 +40,11 @@ public class ApplyLeaveServlet extends HttpServlet {
         String leaveEndDate = request.getParameter("leaveEndDate");
         String leaveReason = request.getParameter("leaveReason");
 
-        //response.setContentType("application/json");
+
         PrintWriter out = response.getWriter();
 
         try (Connection connection = DBConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO leave_history (employeeID, leaveType, leaveStartDate, leaveEndDate, leaveReason) VALUES (?, ?, ?, ?, ?)"
-            );
+            PreparedStatement preparedStatement = connection.prepareStatement(QueriesConstant.ADDING_INTO_LEAVE_HISTORY);
             preparedStatement.setString(1, employeeID);
             preparedStatement.setString(2, leaveType);
             preparedStatement.setString(3, leaveStartDate);
@@ -59,7 +70,7 @@ public class ApplyLeaveServlet extends HttpServlet {
 
             if (!column.isEmpty()) {
                 PreparedStatement preparedStatementUpdate = connection.prepareStatement(
-                        "UPDATE leaveBalance SET " + column + " = " + column + " - DATEDIFF(?, ?) + 1 WHERE employeeId=?"
+                        "UPDATE leaveBalance SET " + column + " = " + column + " - (DATEDIFF(?, ?) + 1) WHERE employeeId=?"
                 );
                 preparedStatementUpdate.setString(1, leaveEndDate);
                 preparedStatementUpdate.setString(2, leaveStartDate);
