@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:list list-class="java.util.LinkedList" id="myBestBuddies">
+        <value>Radha</value>
+        <value>Pooja</value>
+        <value>Archana</value>
+        <value>Jyoti</value>
+        <value>Diya</value>
+    </util:list>
+
+    <util:Map Map-class="java.util.Map" id="feesMap">
+        <entry key="CS" value="1000"/>
+        <entry key="IT" value="2000"/>
+        <entry key="AIDS" value="3000"/>
+    </util:Map>
+
+
+   <bean class="standaloneCollection.Person" name="person1">
+       <!--<property name="friends">
+            <ref bean="myBestBuddies"/>
+       </property>-->
+
+       <property name="friends" ref="myBestBuddies"/>
+   </bean>
+
+    <bean class="standaloneCollection.Person" name="person">
+        <property name="friends" ref="myBestBuddies" />
+    </bean>
+
+    <bean class="standaloneCollection.Person" name="person2">
+        <property name="feestructure" ref="feesMap" />
+    </bean>
+
+
+</beans>
