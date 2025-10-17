@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration  PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!--database configuration-->
+        <property name="hibernate.connection.driverClassName">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hiber</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">Hitmanbau1*@sql</property>
+
+        <!--hibernate configuration-->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+
+        <!--xml/class mapping-->
+        <mapping class="com.springHiber.entities.Student"></mapping>
+        <mapping class="com.springHiber.entities.Certificate"></mapping>
+
+    </session-factory>
+
+</hibernate-configuration>
