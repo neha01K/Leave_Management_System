@@ -16,6 +16,7 @@ import com.lms.dao.LeaveRequestDAO;
 import com.lms.utils.PasswordUtil;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,9 +49,7 @@ public class LeaveManagementSystem {
             System.out.println("3. Show Employees");
             System.out.println("4. Exit");
 
-            System.out.print("Enter option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = readInt("Enter option: ");
 
             switch(choice){
                 case 1:
@@ -80,8 +79,7 @@ public class LeaveManagementSystem {
         System.out.print("Password: ");
         String password = scanner.nextLine();
         System.out.println("Type: 1.Executive 2.Lead 3.Manager");
-        int employeeTypeChoice = scanner.nextInt();
-        scanner.nextLine();
+        int employeeTypeChoice = readInt("Select type: ");
 
         EmployeeType employeeType;
 
@@ -93,12 +91,11 @@ public class LeaveManagementSystem {
                 System.out.println("Invalid choice so default Executive");
         }
 
-        System.out.print("Joining date (YYYY-MM-DD): ");
-        LocalDate employeeJoiningDate = LocalDate.parse(scanner.nextLine());
+        LocalDate employeeJoiningDate = readDate("Joining date (YYYY-MM-DD): ");
 
         Employee employee = employeeService.createEmployee(employeeName,employeeEmail,employeeType,employeeJoiningDate,password);
+        assignManagerFromDatabase(employee);
 
-        com.lms.utils.EmployeePropertiesUtil.saveEmployee(employee);
         employeeDAO.saveEmployee(employee);
 
 
@@ -152,9 +149,7 @@ public class LeaveManagementSystem {
             }
             System.out.println("0. Logout");
 
-            System.out.print("Enter option here: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = readInt("Enter option here: ");
 
             switch(choice){
                 case 1:
@@ -208,8 +203,7 @@ public class LeaveManagementSystem {
             System.out.println((i+1)+". "+leaveTypes[i]);
         }
 
-        int chosenLeave = scanner.nextInt();
-        scanner.nextLine();
+        int chosenLeave = readInt("Choose leave type: ");
         if(chosenLeave<1 || chosenLeave>leaveTypes.length){
             System.out.println("Invalid");
             return;
@@ -218,11 +212,9 @@ public class LeaveManagementSystem {
         if(!validateService.validateLeaveTypeForEmployee(employee, leaveType)){
             return;
         }
-        System.out.print("Start Date: ");
-        LocalDate leaveStartDate = LocalDate.parse(scanner.nextLine());
+        LocalDate leaveStartDate = readDate("Start Date (YYYY-MM-DD): ");
 
-        System.out.print("End Date: ");
-        LocalDate leaveEndDate = LocalDate.parse(scanner.nextLine());
+        LocalDate leaveEndDate = readDate("End Date (YYYY-MM-DD): ");
 
         System.out.print("Reason: ");
         String leaveReason = scanner.nextLine();
@@ -255,9 +247,7 @@ public class LeaveManagementSystem {
             System.out.println((i+1)+". "+pendingRequestsForApprover.get(i));
         }
 
-        System.out.print("Pick no: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = readInt("Pick no: ");
 
         if(choice<1 || choice>pendingRequestsForApprover.size()){
             System.out.println("Invalid");
@@ -268,8 +258,7 @@ public class LeaveManagementSystem {
 
         System.out.println("1. Approve 2. Reject");
 
-        int action = scanner.nextInt();
-        scanner.nextLine();
+        int action = readInt("Action: ");
 
         switch(action){
             case 1:
@@ -340,6 +329,38 @@ public class LeaveManagementSystem {
         } else {
             for (Employee employee : employeesList) {
                 System.out.println(employee);
+            }
+        }
+    }
+
+    private void assignManagerFromDatabase(Employee employee) {
+        if (employee.getEmployeeType() == EmployeeType.EXECUTIVE) {
+            employee.setManagerID(employeeDAO.findFirstEmployeeIDByType(EmployeeType.LEAD));
+        } else if (employee.getEmployeeType() == EmployeeType.LEAD) {
+            employee.setManagerID(employeeDAO.findFirstEmployeeIDByType(EmployeeType.MANAGER));
+        }
+    }
+
+    private int readInt(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            try {
+                return Integer.parseInt(input.trim());
+            } catch (NumberFormatException exception) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+    }
+
+    private LocalDate readDate(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            try {
+                return LocalDate.parse(input.trim());
+            } catch (DateTimeParseException exception) {
+                System.out.println("Please enter a date in YYYY-MM-DD format.");
             }
         }
     }

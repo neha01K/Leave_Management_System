@@ -24,6 +24,7 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
             preparedStatement.setString(7, employee.getPasswordHash());
 
             preparedStatement.executeUpdate();
+            new LeaveBalanceDAO().saveInitialBalances(employee);
         }
         catch (SQLException exception) {
             System.out.println(exception.getMessage());
@@ -76,6 +77,22 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
 
             if (resultSet.next()) {
                 return mapEmployee(resultSet);
+            }
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return null;
+    }
+
+    public String findFirstEmployeeIDByType(EmployeeType employeeType) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_FIRST_EMPLOYEE_ID_BY_TYPE)) {
+
+            preparedStatement.setString(1, employeeType.name());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("employee_id");
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
