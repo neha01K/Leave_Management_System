@@ -1,6 +1,7 @@
 package com.lms.services;
 
 import com.lms.dao.EmployeeDAOInterface;
+import com.lms.dao.LeaveBalanceDAO;
 import com.lms.dao.LeaveRequestDAOInterface;
 import com.lms.exceptions.EmployeeNotFound;
 import com.lms.models.Employee;
@@ -17,6 +18,7 @@ public class LeaveService {
     EmployeeService employeeService;
     EmployeeDAOInterface employeeDAO;
     LeaveRequestDAOInterface leaveRequestDAO;
+    LeaveBalanceDAO leaveBalanceDAO;
 
     public LeaveService(EmployeeService employeeService) {
         leaveRequest = new HashMap<>();
@@ -27,6 +29,7 @@ public class LeaveService {
         leaveRequest = new HashMap<>();
         this.employeeDAO = employeeDAO;
         this.leaveRequestDAO = leaveRequestDAO;
+        this.leaveBalanceDAO = new LeaveBalanceDAO();
     }
 
     public void submitLeaveRequest(LeaveRequest request) {
@@ -85,6 +88,13 @@ public class LeaveService {
 
         leaveRequest.setLeaveStatus(LeaveStatus.APPROVED);
         leaveRequest.setLeaveApprovedBy(approverID);
+        if (leaveBalanceDAO != null) {
+            leaveBalanceDAO.deductLeaveBalance(
+                    leaveRequest.getEmployeeID(),
+                    leaveRequest.getLeaveType(),
+                    leaveRequest.getNumberOfDaysOfLeave()
+            );
+        }
         if (leaveRequestDAO != null) {
             leaveRequestDAO.updateLeaveRequestStatus(leaveRequest);
         }
@@ -114,6 +124,12 @@ public class LeaveService {
 
     public Map<LeaveType, Integer> getCurrentLeaveBalance(String employeeID) throws EmployeeNotFound {
         Employee employee = getEmployee(employeeID);
+        if (leaveBalanceDAO != null) {
+            Map<LeaveType, Integer> persistedBalance = leaveBalanceDAO.getLeaveBalances(employeeID);
+            if (!persistedBalance.isEmpty()) {
+                return persistedBalance;
+            }
+        }
         Map<LeaveType, Integer> balance = new HashMap<>(employee.getEmployeeLeaveBalance());
 
         for (LeaveRequest request : getLeaveHistoryForEmployee(employeeID)) {

@@ -5,11 +5,13 @@ A Java console application for managing employee leave requests. Employees can r
 ## Features
 
 - Employee registration with role: `EXECUTIVE`, `LEAD`, or `MANAGER`
-- Password-based login using SHA-256 password hashes
+- Password-based login using BCrypt password hashes
 - MySQL-backed employee storage
 - MySQL-backed leave request storage
+- MySQL-backed leave balance storage
 - Leave request validation for date ranges and leave-type rules
 - Role-based approval flow for Leads and Managers
+- Console and browser-based UI entry points
 - JUnit 5 tests through Maven
 
 ## Requirements
@@ -27,6 +29,12 @@ SOURCE src/main/resources/schema.sql;
 ```
 
 Or manually run the SQL in `src/main/resources/schema.sql` from your MySQL client.
+
+If you already created the old database before the UI branch changes, run:
+
+```sql
+SOURCE src/main/resources/migration-ui.sql;
+```
 
 The sample users inserted by the schema all use this password:
 
@@ -66,8 +74,22 @@ $env:LMS_DB_PASSWORD="your-password"
 
 ## Run
 
+Console app:
+
 ```powershell
 mvn clean compile exec:java
+```
+
+Browser UI:
+
+```powershell
+mvn clean compile exec:java -Dexec.mainClass=com.lms.web.LeaveManagementWebApp
+```
+
+Then open:
+
+```text
+http://localhost:8080
 ```
 
 ## Test
@@ -79,5 +101,5 @@ mvn test
 ## Notes
 
 - `src/main/resources/db.properties` is ignored by Git so local database passwords are not committed.
-- Leave requests are stored in the `leave_requests` table, so pending requests and leave history survive app restarts.
+- Leave requests are stored in the `leave_requests` table, and balances are stored in `employee_leave_balances`.
 - Maven is configured for the current project layout: production code in `src` and tests in `test/java`.
