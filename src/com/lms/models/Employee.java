@@ -14,10 +14,11 @@ public class Employee {
     private EmployeeType employeeType;
     private String managerID;
     private LocalDate employeeJoiningDate;
-    private static Map<LeaveType, Integer> employeeLeaveBalance;
+    private Map<LeaveType, Integer> employeeLeaveBalance;
     private Map<LeaveType, Integer> employeeUsedLeaves;
     private int maternityLeavesUsed = 0;
     private int parentalLeavesUsed = 0;
+    private String passwordHash;
 
     public Employee(String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
         this.employeeID = generateEmployeeID();
@@ -30,6 +31,12 @@ public class Employee {
         initializeLeaveBalance();
     }
 
+    public Employee(String employeeName, String employeeEmail, EmployeeType employeeType,
+                    LocalDate employeeJoiningDate, String passwordHash) {
+        this(employeeName, employeeEmail, employeeType, employeeJoiningDate);
+        this.passwordHash = passwordHash;
+    }
+
     public Employee(String employeeID, String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
         this.employeeID = employeeID;
         this.employeeName = employeeName;
@@ -39,6 +46,13 @@ public class Employee {
         this.employeeLeaveBalance = new HashMap<>();
         this.employeeUsedLeaves = new HashMap<>();
         initializeLeaveBalance();
+    }
+
+    public Employee(String employeeID, String employeeName, String employeeEmail, EmployeeType employeeType,
+                    LocalDate employeeJoiningDate, String managerID, String passwordHash) {
+        this(employeeID, employeeName, employeeEmail, employeeType, employeeJoiningDate);
+        this.managerID = managerID;
+        this.passwordHash = passwordHash;
     }
 
 
@@ -80,10 +94,12 @@ public class Employee {
     public String getManagerID() { return managerID; }
     public void setManagerID(String managerId) { this.managerID = managerId; }
     public LocalDate getEmployeeJoiningDate() { return employeeJoiningDate; }
-    public static Map<LeaveType, Integer> getEmployeeLeaveBalance() { return employeeLeaveBalance; }
+    public Map<LeaveType, Integer> getEmployeeLeaveBalance() { return employeeLeaveBalance; }
     public Map<LeaveType, Integer> getEmployeeUsedLeaves() { return employeeUsedLeaves; }
     public int getEmployeeMaternityLeavesUsed() { return maternityLeavesUsed; }
     public int getEmployeeParentalLeavesUsed() { return parentalLeavesUsed; }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public void incrementMaternityLeaves() { this.maternityLeavesUsed++; }
     public void incrementParentalLeaves() { this.parentalLeavesUsed++; }
 

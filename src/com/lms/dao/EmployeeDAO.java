@@ -20,6 +20,8 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
             preparedStatement.setString(3, employee.getEmployeeEmail());
             preparedStatement.setString(4, employee.getEmployeeType().name());
             preparedStatement.setDate(5, Date.valueOf(employee.getEmployeeJoiningDate()));
+            preparedStatement.setString(6, employee.getManagerID());
+            preparedStatement.setString(7, employee.getPasswordHash());
 
             preparedStatement.executeUpdate();
         }
@@ -37,14 +39,7 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                Employee employee = new Employee(
-                        resultSet.getString("employee_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("email"),
-                        EmployeeType.valueOf(resultSet.getString("type")),
-                        resultSet.getDate("joining_date").toLocalDate()
-                );
-                employeesList.add(employee);
+                employeesList.add(mapEmployee(resultSet));
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
@@ -62,17 +57,41 @@ public class EmployeeDAO  implements EmployeeDAOInterface{
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                return new Employee(
-                        resultSet.getString("employee_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("email"),
-                        EmployeeType.valueOf(resultSet.getString("type")),
-                        resultSet.getDate("joining_date").toLocalDate()
-                );
+                return mapEmployee(resultSet);
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
         return null;
+    }
+
+    public Employee getEmployeeDetailByEmail(String email) {
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_EMPLOYEES_BY_EMAIL)) {
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return mapEmployee(resultSet);
+            }
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return null;
+    }
+
+    private Employee mapEmployee(ResultSet resultSet) throws SQLException {
+        return new Employee(
+                resultSet.getString("employee_id"),
+                resultSet.getString("name"),
+                resultSet.getString("email"),
+                EmployeeType.valueOf(resultSet.getString("type")),
+                resultSet.getDate("joining_date").toLocalDate(),
+                resultSet.getString("manager_id"),
+                resultSet.getString("password_hash")
+        );
     }
 }

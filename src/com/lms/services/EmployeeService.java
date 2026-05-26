@@ -3,6 +3,7 @@ package com.lms.services;
 import com.lms.exceptions.EmployeeNotFound;
 import com.lms.models.Employee;
 import com.lms.models.enums.EmployeeType;
+import com.lms.utils.PasswordUtil;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -21,7 +22,16 @@ public class EmployeeService {
 
     // Create a new employee and assign manager if needed
     public Employee createEmployee(String employeeName, String employeeEmail, EmployeeType employeeType, LocalDate employeeJoiningDate) {
+        return createEmployee(employeeName, employeeEmail, employeeType, employeeJoiningDate, null);
+    }
+
+    public Employee createEmployee(String employeeName, String employeeEmail, EmployeeType employeeType,
+                                   LocalDate employeeJoiningDate, String password) {
         Employee newEmployee = new Employee(employeeName, employeeEmail, employeeType, employeeJoiningDate);
+
+        if (password != null && !password.trim().isEmpty()) {
+            newEmployee.setPasswordHash(PasswordUtil.hashPassword(password));
+        }
 
         if (employeeType == EmployeeType.EXECUTIVE) {
             String leadID = findFirstLeadID();

@@ -5,23 +5,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String url = "jdbc:mysql://localhost:3306/leave_management_system_db";
-    private static final String username = "root";
-    private static final String password = "Hitmanbau1*@sql";
 
     public static Connection getConnection() {
 
-        Connection connection = null;
-
         try {
+            DatabaseConfig config = DatabaseConfig.load();
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(url, username, password);
-
-
+            return DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         } catch (ClassNotFoundException | SQLException exception){
-            System.out.println(exception.getMessage());
+            throw new IllegalStateException("Unable to connect to database: " + exception.getMessage(), exception);
         }
-
-        return connection;
     }
 }

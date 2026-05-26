@@ -33,6 +33,21 @@ public class LeaveRequest {
         this.leaveRequestDate = LocalDate.now();
     }
 
+    public LeaveRequest(String leaveRequestID, String employeeID, LeaveType leaveType, LocalDate leaveStartDate,
+                        LocalDate leaveEndDate, int numberOfDaysOfLeave, String leaveReason, LeaveStatus leaveStatus,
+                        String leaveApprovedBy, LocalDate leaveRequestDate) {
+        this.leaveRequestID = leaveRequestID;
+        this.employeeID = employeeID;
+        this.leaveType = leaveType;
+        this.leaveStartDate = leaveStartDate;
+        this.leaveEndDate = leaveEndDate;
+        this.numberOfDaysOfLeave = numberOfDaysOfLeave;
+        this.leaveReason = leaveReason;
+        this.leaveStatus = leaveStatus;
+        this.leaveApprovedBy = leaveApprovedBy;
+        this.leaveRequestDate = leaveRequestDate;
+    }
+
     private String generateLeaveRequestID() {
         return "REQ" + System.currentTimeMillis() % 10000;
     }

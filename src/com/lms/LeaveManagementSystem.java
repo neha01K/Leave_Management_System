@@ -12,6 +12,8 @@ import com.lms.services.EmployeeService;
 import com.lms.services.LeaveService;
 import com.lms.services.ValidationService;
 import com.lms.dao.EmployeeDAO;
+import com.lms.dao.LeaveRequestDAO;
+import com.lms.utils.PasswordUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,9 +33,9 @@ public class LeaveManagementSystem {
     public LeaveManagementSystem(){
         scanner = new Scanner(System.in);
         employeeService = new EmployeeService();
-        leaveService = new LeaveService(employeeService);
         validateService = new ValidationService();
         employeeDAO  =new EmployeeDAO();
+        leaveService = new LeaveService(employeeDAO, new LeaveRequestDAO());
         employee = null;
     }
 
@@ -75,6 +77,8 @@ public class LeaveManagementSystem {
         String employeeName = scanner.nextLine();
         System.out.print("Email: ");
         String employeeEmail = scanner.nextLine();
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
         System.out.println("Type: 1.Executive 2.Lead 3.Manager");
         int employeeTypeChoice = scanner.nextInt();
         scanner.nextLine();
@@ -92,7 +96,7 @@ public class LeaveManagementSystem {
         System.out.print("Joining date (YYYY-MM-DD): ");
         LocalDate employeeJoiningDate = LocalDate.parse(scanner.nextLine());
 
-        Employee employee = employeeService.createEmployee(employeeName,employeeEmail,employeeType,employeeJoiningDate);
+        Employee employee = employeeService.createEmployee(employeeName,employeeEmail,employeeType,employeeJoiningDate,password);
 
         com.lms.utils.EmployeePropertiesUtil.saveEmployee(employee);
         employeeDAO.saveEmployee(employee);
@@ -105,6 +109,8 @@ public class LeaveManagementSystem {
 
         System.out.print("Enter Employee ID: ");
         String employeeID = scanner.nextLine();
+        System.out.print("Enter Password: ");
+        String password = scanner.nextLine();
 
         //Employee employee = employeeService.getEmployee(employeeID);
 
@@ -112,6 +118,10 @@ public class LeaveManagementSystem {
             employee = employeeDAO.getEmployeeDetailByEmployeeID(employeeID);
             if(employee==null) {
                 throw new EmployeeNotFound("Employee with ID: "+employeeID+ " not found");
+            }
+            if (!PasswordUtil.matches(password, employee.getPasswordHash())) {
+                System.out.println("Invalid password");
+                return;
             }
         }catch(EmployeeNotFound exception){
             System.out.println(exception.getMessage());
@@ -287,8 +297,12 @@ public class LeaveManagementSystem {
             return;
         }
 
-        for(Map.Entry<LeaveType,Integer> employeeLeaveBalance : employee.getEmployeeLeaveBalance().entrySet()){
-            System.out.println(employeeLeaveBalance.getKey()+" = "+employeeLeaveBalance.getValue());
+        try {
+            for(Map.Entry<LeaveType,Integer> employeeLeaveBalance : leaveService.getCurrentLeaveBalance(employeeID).entrySet()){
+                System.out.println(employeeLeaveBalance.getKey()+" = "+employeeLeaveBalance.getValue());
+            }
+        } catch (EmployeeNotFound exception) {
+            System.out.println(exception.getMessage());
         }
     }
 

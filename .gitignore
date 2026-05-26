@@ -1,5 +1,6 @@
 ### IntelliJ IDEA ###
 out/
+out-test/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -14,6 +15,12 @@ out/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+
+### Maven ###
+target/
+
+### Local secrets ###
+src/main/resources/db.properties
 
 ### NetBeans ###
 /nbproject/private/

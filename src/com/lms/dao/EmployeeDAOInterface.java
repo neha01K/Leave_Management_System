@@ -12,5 +12,6 @@ public interface EmployeeDAOInterface {
 
      Employee getEmployeeDetailByEmployeeID(String employeeID);
 
+     Employee getEmployeeDetailByEmail(String email);
 
 }
